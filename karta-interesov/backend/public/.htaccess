@@ -1,0 +1,10 @@
+# Apache (XAMPP): все запросы, кроме существующих файлов, обрабатывает index.php
+RewriteEngine On
+# Apache по умолчанию не передаёт заголовок Authorization в PHP
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>

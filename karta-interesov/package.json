@@ -1,0 +1,36 @@
+{
+  "name": "karta-interesov",
+  "private": true,
+  "version": "1.5.0",
+  "description": "Профориентационный тест «Карта интересов» (frontend)",
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "verify": "tsx scripts/verify.ts",
+    "catalog:export": "tsx scripts/export-catalog.ts",
+    "catalog:check": "tsx scripts/export-catalog.ts --check",
+    "verify:server": "tsx scripts/verify-server-flow.ts",
+    "verify:all": "tsx scripts/verify.ts && tsx scripts/verify-server-flow.ts"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "tailwindcss": "^4.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vite": "^8.0.5"
+  }
+}

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+.cache/
+.vite/
+vite.config.*.timestamp-*
+*.tsbuildinfo
+*.log
+logs/
+
+# Переменные окружения: реальные .env не коммитим, шаблон .env.example — коммитим
+.env
+.env.*
+!.env.example
+
+.DS_Store
