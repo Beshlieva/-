@@ -17,6 +17,8 @@ export default defineConfig({
     port: 5173, // npm run dev      -> http://localhost:5173
   },
   preview: {
-    port: 4173, // npm run preview  -> http://localhost:4173
+    port: 4173,
+    allowedHosts: ['karta-interesov.onrender.com'],// npm run preview  -> http://localhost:4173
   },
 })
+
