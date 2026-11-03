@@ -19,6 +19,7 @@ final class Config
         public readonly string $dbName,
         public readonly string $dbUser,
         public readonly string $dbPassword,
+        public readonly ?string $dbSslCa,
         public readonly string $testVersion,
         public readonly int $questionTimeMs,
         public readonly int $answerGraceMs,
@@ -78,6 +79,16 @@ final class Config
             throw new RuntimeException('DB_PASSWORD не может быть пустым при APP_ENV=production.');
         }
 
+        $dbSslCa = Env::get('DB_SSL_CA');
+        if ($dbSslCa !== null && trim($dbSslCa) !== '') {
+            $dbSslCa = trim($dbSslCa);
+            if (!is_file($dbSslCa)) {
+                throw new RuntimeException('DB_SSL_CA указывает на несуществующий файл: ' . $dbSslCa);
+            }
+        } else {
+            $dbSslCa = null;
+        }
+
         $root = self::backendRoot();
         $catalogDir = Env::get('CATALOG_DIR');
         if ($catalogDir === null || $catalogDir === '') {
@@ -98,6 +109,7 @@ final class Config
             $dbName,
             self::required('DB_USER'),
             $dbPassword,
+            $dbSslCa,
             Env::get('TEST_VERSION', 'golomshtok-174-v1') ?? 'golomshtok-174-v1',
             self::int('QUESTION_TIME_MS', 15000, 1000, 600000),
             self::int('ANSWER_GRACE_MS', 1000, 0, 30000),

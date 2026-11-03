@@ -1,0 +1,60 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Karta: MySQL (portable install)",
+      "type": "shell",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; $base=Join-Path $env:LOCALAPPDATA 'mysql-8.4\\mysql-8.4.9-winx64'; $exe=Join-Path $base 'bin\\mysqld.exe'; if(Get-NetTCPConnection -State Listen -LocalPort 3306 -ErrorAction SilentlyContinue){Write-Output 'MySQL is already listening on port 3306'; exit 0}; if(!(Test-Path $exe)){Write-Error 'Portable MySQL was not found under LOCALAPPDATA; start your configured MySQL Windows service or edit this VS Code task.'; exit 1}; & $exe \"--basedir=$base\" \"--datadir=$base\\data\" '--port=3306' '--bind-address=127.0.0.1' '--console'; exit $LASTEXITCODE"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Karta: PHP API",
+      "type": "shell",
+      "command": "php",
+      "args": [
+        "-S",
+        "127.0.0.1:8000",
+        "-t",
+        "public",
+        "public/index.php"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}\\backend"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Karta: Vite",
+      "type": "shell",
+      "command": "npm.cmd",
+      "args": [
+        "run",
+        "dev",
+        "--",
+        "--host",
+        "127.0.0.1"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}

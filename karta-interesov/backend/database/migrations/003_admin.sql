@@ -1,5 +1,4 @@
--- 003: администраторы и журнал их действий.
-
+-- 003: администраторы и журнал их д
 CREATE TABLE admin_users (
   id                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   username          VARCHAR(64)  NOT NULL,

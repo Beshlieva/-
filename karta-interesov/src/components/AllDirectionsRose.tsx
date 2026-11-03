@@ -1,3 +1,4 @@
+import CategoryIcon from './CategoryIcon';
 import { CATEGORIES, toDisplay } from '../data/questions';
 
 interface AllDirectionsRoseProps {
@@ -9,10 +10,9 @@ const VW = 560;
 const VH = 560;
 const CX = VW / 2;
 const CY = VH / 2;
-const INNER_R = 22;
-const MAX_R   = 200;
-const SLICE   = 360 / 29;
-const GAP     = 0.6;
+const INNER_R = 28;
+const MAX_R = 200;
+const GAP = 8;
 
 function toRad(d: number) { return (d * Math.PI) / 180; }
 function polarXY(deg: number, r: number) {
@@ -27,49 +27,43 @@ function arcPath(s: number, e: number, r1: number, r2: number) {
 }
 function scoreToR(s: number) { return INNER_R + ((s + 12) / 24) * (MAX_R - INNER_R); }
 
-// Sorted by score descending so legend reads top → bottom
 export default function AllDirectionsRose({ scores, onSelect }: AllDirectionsRoseProps) {
-  const sorted = CATEGORIES
+  const top10 = CATEGORIES
     .map(cat => ({ ...cat, score: scores[cat.id] ?? 0 }))
-    .sort((a, b) => b.score - a.score);
-
-  // We draw in original category order around the circle (id order)
-  const byId = CATEGORIES.map(cat => ({ ...cat, score: scores[cat.id] ?? 0 }));
-
-  const RING_PTS = [25, 50, 75, 100];
-  const ringRaw  = (pt: number) => (pt / 100) * 24 - 12;
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10);
+  const slice = 360 / top10.length;
+  const ringPoints = [25, 50, 75, 100];
+  const ringRaw = (pt: number) => (pt / 100) * 24 - 12;
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full">
+    <div className="flex flex-col items-center gap-5 w-full">
       <svg
         viewBox={`0 0 ${VW} ${VH}`}
         width="100%"
-        style={{ maxWidth: 480, aspectRatio: '1/1' }}
-        aria-label="Все 29 направлений — полярная диаграмма"
+        style={{ maxWidth: 500, aspectRatio: '1/1' }}
+        aria-label="Роза — топ 10 направлений"
       >
-        {/* Guide rings */}
-        {RING_PTS.map(pt => {
+        {ringPoints.map(pt => {
           const r = scoreToR(ringRaw(pt));
           return (
             <g key={pt}>
-              <circle cx={CX} cy={CY} r={r} fill="none" stroke="#CBD5E1" strokeWidth={0.7} strokeDasharray="4 4" />
-              <text x={CX} y={CY - r - 3} textAnchor="middle" fontSize="8" fill="#94A3B8" fontFamily="var(--font-sans)" fontWeight="600">
+              <circle cx={CX} cy={CY} r={r} fill="none" stroke="#CBD5E1" strokeWidth={0.9} strokeDasharray="5 5" />
+              <text x={CX} y={CY - r - 6} textAnchor="middle" fontSize="8" fill="#7C8AA5" fontFamily="var(--font-sans)" fontWeight="700">
                 {pt}
               </text>
             </g>
           );
         })}
 
-        {/* Segments — one per category in id order */}
-        {byId.map((cat, i) => {
-          const startDeg = i * SLICE + GAP / 2;
-          const endDeg   = (i + 1) * SLICE - GAP / 2;
-          const midDeg   = i * SLICE + SLICE / 2;
-          const outerR   = scoreToR(Math.max(cat.score, -11.5));
-
-          // Icon at midpoint of outer arc
-          const iconR = outerR + 10;
-          const ip = polarXY(midDeg, iconR > MAX_R + 12 ? MAX_R + 12 : iconR);
+        {top10.map((cat, i) => {
+          const startDeg = i * slice + GAP / 2;
+          const endDeg = (i + 1) * slice - GAP / 2;
+          const midDeg = i * slice + slice / 2;
+          const outerR = scoreToR(Math.max(cat.score, -11.5));
+          const labelPos = polarXY(midDeg, MAX_R + 32);
+          const iconPos = polarXY(midDeg, MAX_R + 16);
+          const textAnchor = midDeg > 180 && midDeg < 360 ? 'end' : 'start';
 
           return (
             <g
@@ -77,43 +71,56 @@ export default function AllDirectionsRose({ scores, onSelect }: AllDirectionsRos
               onClick={() => onSelect(cat.id)}
               style={{ cursor: 'pointer' }}
             >
-              {/* Track */}
-              <path d={arcPath(startDeg, endDeg, INNER_R, MAX_R)} fill={cat.color} opacity={0.1} />
-              {/* Value */}
-              <path d={arcPath(startDeg, endDeg, INNER_R, outerR)} fill={cat.color} opacity={0.85} />
-              {/* Hover hitbox */}
-              <path d={arcPath(startDeg, endDeg, INNER_R, MAX_R)} fill="transparent"
-                onMouseEnter={e => { (e.currentTarget as SVGElement).style.opacity = '0.25'; }}
-                onMouseLeave={e => { (e.currentTarget as SVGElement).style.opacity = '0'; }}
-              />
-              {/* Tiny icon near tip — only if segment is tall enough */}
-              {outerR - INNER_R > 30 && (
-                <text x={ip.x} y={ip.y + 4} textAnchor="middle" fontSize="9">
-                  {cat.icon}
+              <path d={arcPath(startDeg, endDeg, INNER_R, MAX_R)} fill={cat.color} opacity={0.08} />
+              <path d={arcPath(startDeg, endDeg, INNER_R, outerR)} fill={cat.color} opacity={0.9} />
+              <path d={arcPath(startDeg, endDeg, INNER_R, MAX_R)} fill="transparent" stroke="transparent" strokeWidth={10} />
+
+              {outerR - INNER_R > 22 && (
+                <text
+                  x={polarXY(midDeg, (outerR + INNER_R) / 2).x}
+                  y={polarXY(midDeg, (outerR + INNER_R) / 2).y + 4}
+                  textAnchor="middle"
+                  fontSize="10"
+                  fontWeight="800"
+                  fill="white"
+                  fontFamily="var(--font-sans)"
+                >
+                  {toDisplay(cat.score)}
                 </text>
               )}
+
+              <text
+                x={labelPos.x}
+                y={labelPos.y + 4}
+                textAnchor={textAnchor}
+                fontSize="10"
+                fontWeight="700"
+                fill="#12263F"
+                fontFamily="var(--font-sans)"
+              >
+                {cat.name}
+              </text>
             </g>
           );
         })}
 
-        {/* Center */}
         <circle cx={CX} cy={CY} r={INNER_R - 2} fill="#FFFFFF" />
         <circle cx={CX} cy={CY} r={INNER_R - 2} fill="none" stroke="#E2E8F0" strokeWidth={1} />
-        <text x={CX} y={CY - 4} textAnchor="middle" fontSize="7" fill="#94A3B8" fontFamily="var(--font-sans)" fontWeight="700">ВСЕ</text>
-        <text x={CX} y={CY + 9} textAnchor="middle" fontSize="12" fill="#0B1F3A" fontFamily="var(--font-display)">29</text>
+        <text x={CX} y={CY - 6} textAnchor="middle" fontSize="8" fill="#7C8AA5" fontFamily="var(--font-sans)" fontWeight="700">ТОП</text>
+        <text x={CX} y={CY + 10} textAnchor="middle" fontSize="15" fill="#0B1F3A" fontFamily="var(--font-display)">10</text>
       </svg>
 
-      {/* Legend — 2 columns, sorted by score */}
       <div className="w-full">
         <p className="text-xs font-semibold uppercase tracking-wider mb-3 text-center" style={{ color: '#55667D' }}>
           Нажмите на направление для подробностей
         </p>
         <div className="grid grid-cols-2 gap-1.5">
-          {sorted.map((cat, rank) => {
+          {top10.map((cat, rank) => {
             const disp = toDisplay(cat.score);
             return (
               <button
                 key={cat.id}
+                type="button"
                 onClick={() => onSelect(cat.id)}
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-left transition-all duration-100 w-full"
                 style={{
@@ -121,14 +128,14 @@ export default function AllDirectionsRose({ scores, onSelect }: AllDirectionsRos
                   border: `1px solid ${cat.color}25`,
                   cursor: 'pointer',
                 }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = cat.color + '22'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = rank < 3 ? cat.color + '14' : '#FFFFFF'; }}
               >
-                <span style={{ fontSize: '0.85rem', minWidth: '1.25rem', textAlign: 'center' }}>{cat.icon}</span>
-                <span className="flex-1 text-xs font-medium truncate" style={{ color: '#12263F' }}>
+                <span style={{ fontSize: '0.82rem', minWidth: '1.25rem', textAlign: 'center' }}>
+                  <CategoryIcon name={cat.icon} size={12} color={cat.color} />
+                </span>
+                <span className="flex-1 text-[11px] font-medium truncate" style={{ color: '#12263F' }}>
                   {cat.name}
                 </span>
-                <span className="text-xs font-bold shrink-0" style={{ color: cat.color }}>
+                <span className="text-[11px] font-bold shrink-0" style={{ color: cat.color }}>
                   {disp}
                 </span>
               </button>

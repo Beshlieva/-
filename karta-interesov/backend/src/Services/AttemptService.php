@@ -309,6 +309,51 @@ final class AttemptService
         });
     }
 
+    /** Последний сохранённый результат текущего пользователя или null. */
+    public function latestCompletedResult(int $userId): ?array
+    {
+        $st = $this->pdo->prepare(
+            'SELECT id FROM test_attempts
+              WHERE user_id = ? AND status = \'completed\'
+           ORDER BY completed_at DESC, id DESC
+              LIMIT 1'
+        );
+        $st->execute([$userId]);
+        $id = $st->fetchColumn();
+        return $id === false ? null : $this->result($userId, (int) $id);
+    }
+
+    /**
+     * Завершённые результаты только текущего пользователя, новые сначала.
+     *
+     * @return array{items:array<int,array<string,mixed>>,page:int,pageSize:int,total:int}
+     */
+    public function completedResults(int $userId, int $page, int $pageSize = 10): array
+    {
+        $count = $this->pdo->prepare(
+            'SELECT COUNT(*) FROM test_attempts WHERE user_id = ? AND status = \'completed\''
+        );
+        $count->execute([$userId]);
+        $total = (int) $count->fetchColumn();
+
+        $st = $this->pdo->prepare(
+            'SELECT id FROM test_attempts
+              WHERE user_id = ? AND status = \'completed\'
+           ORDER BY completed_at DESC, id DESC
+              LIMIT ? OFFSET ?'
+        );
+        $st->bindValue(1, $userId, PDO::PARAM_INT);
+        $st->bindValue(2, $pageSize, PDO::PARAM_INT);
+        $st->bindValue(3, ($page - 1) * $pageSize, PDO::PARAM_INT);
+        $st->execute();
+
+        $items = [];
+        foreach ($st->fetchAll(PDO::FETCH_COLUMN) as $id) {
+            $items[] = $this->result($userId, (int) $id);
+        }
+        return ['items' => $items, 'page' => $page, 'pageSize' => $pageSize, 'total' => $total];
+    }
+
     // ───────────────────────── Внутренняя кухня ─────────────────────────
 
     /**
@@ -634,6 +679,7 @@ final class AttemptService
             'answeredCount' => (int) $a['answered_count'],
             'persisted' => true,
             'calculatedAt' => Clock::iso(Clock::fromDb((string) $a['calculated_at'])),
+            'completedAt' => Clock::iso(Clock::fromDb((string) $a['completed_at'])),
             'topCategoryIds' => array_values($top),
             'scores' => $scores,
         ];

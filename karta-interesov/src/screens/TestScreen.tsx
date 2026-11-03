@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { QUESTIONS, ANSWER_OPTIONS, CATEGORIES } from '../data/questions';
 import AppHeader from '../components/AppHeader';
 import AnswerCard from '../components/AnswerCard';
+import CategoryIcon from '../components/CategoryIcon';
 import ProgressBar from '../components/ProgressBar';
 import TimerRing from '../components/TimerRing';
 import { IconAlert } from '../components/icons';
@@ -149,7 +150,9 @@ export default function TestScreen({ view, onAnswer, onExpire }: TestScreenProps
             <div className="qcard__head">
               <div>
                 <span className="qcard__cat">
-                  <span className="ic" style={{ background: category.color + '1a' }} aria-hidden="true">{category.icon}</span>
+                  <span className="ic" style={{ background: category.color + '1a' }} aria-hidden="true">
+                    <CategoryIcon name={category.icon} size={16} color={category.color} />
+                  </span>
                   {category.name}
                 </span>
                 {isRetry && (

@@ -6,6 +6,7 @@ import CompletionScreen from './screens/CompletionScreen';
 import ResultsGate from './screens/ResultsGate';
 import AuthScreen from './screens/AuthScreen';
 import AttemptStatusScreen from './screens/AttemptStatusScreen';
+import UserCabinet from './screens/UserCabinet';
 import { clearProgress, loadProgress, saveProgress } from './lib/progressStorage';
 import { generateId } from './lib/id';
 import { clearAuth, loadAuth, saveAuth } from './lib/authStorage';
@@ -71,7 +72,11 @@ function screenForServerState(state: ServerAttemptState): AppScreen {
 export default function App() {
   const [initial] = useState(restoreLocalSession);
   const [initialAuth] = useState<AuthSession | null>(() => (authService.enabled ? loadAuth() : null));
-  const [screen, setScreen] = useState<AppScreen>(SERVER_MODE ? 'start' : initial.screen);
+  const [screen, setScreen] = useState<AppScreen>(
+    SERVER_MODE
+      ? initialAuth && window.location.hash.replace(/\/+$/, '') === '#/account' ? 'account' : 'start'
+      : initial.screen,
+  );
   // Демо-режим: локальная сессия
   const [session, setSession] = useState<TestSession | null>(initial.session);
   const [clientAttemptId, setClientAttemptId] = useState(initial.clientAttemptId);
@@ -80,6 +85,7 @@ export default function App() {
   const [auth, setAuth] = useState<AuthSession | null>(initialAuth);
   // Режим api: состояние серверной попытки
   const [snap, setSnap] = useState<AttemptSnapshot>(EMPTY_SNAPSHOT);
+  const [restoredResultId, setRestoredResultId] = useState<string | null>(null);
   const [booting, setBooting] = useState<boolean>(SERVER_MODE && initialAuth !== null);
   const controllerRef = useRef<AttemptController | null>(null);
   /** Куда перейти, если после входа незавершённой попытки нет. */
@@ -149,13 +155,40 @@ export default function App() {
     controllerRef.current = controller;
     setSnap(controller.snapshot);
 
-    void controller.restore(loadAttemptRef(userId)).then(state => {
+    void (async () => {
+      const state = await controller.restore(loadAttemptRef(userId));
       if (cancelled || unauthorized) return; // при 401 приложение уже вернуло пользователя ко входу
+      const requestedCabinet =
+        window.location.hash.replace(/\/+$/, '') === '#/account' || afterRestoreRef.current === 'account';
+
+      // При отсутствии незавершённой попытки восстанавливаем последний результат из MySQL,
+      // даже если локальная ссылка на попытку была очищена или пользователь вошёл на другом устройстве.
+      if (!state && controller.snapshot.phase !== 'error') {
+        try {
+          const result = await attemptService.latestResult(token);
+          if (cancelled || unauthorized) return;
+          if (requestedCabinet) {
+            setScreen('account');
+          } else if (result) {
+            setRestoredResultId(result.attemptId);
+            setScreen('results');
+          } else {
+            setScreen(afterRestoreRef.current);
+          }
+        } catch (err) {
+          if (cancelled || unauthorized) return;
+          setSnap({ ...controller.snapshot, phase: 'error', error: describeError(err) });
+          setScreen(requestedCabinet ? 'account' : 'test');
+        }
+      } else if (controller.snapshot.phase === 'error') {
+        // Ошибка связи: экран статуса покажет сообщение и кнопку «Повторить»
+        setScreen(requestedCabinet ? 'account' : 'test');
+      } else if (state) {
+        setRestoredResultId(null);
+        setScreen(requestedCabinet ? 'account' : screenForServerState(state));
+      }
       setBooting(false);
-      // Ошибка связи: экран статуса покажет сообщение и кнопку «Повторить»
-      if (controller.snapshot.phase === 'error') setScreen('test');
-      else setScreen(state ? screenForServerState(state) : afterRestoreRef.current);
-    });
+    })();
 
     return () => {
       cancelled = true;
@@ -220,8 +253,9 @@ export default function App() {
 
   function handleAuthenticated(next: AuthSession) {
     saveAuth(next);
-    // После входа сначала ищем незавершённую попытку на сервере (эффект выше); если её нет — инструкция.
-    afterRestoreRef.current = 'instructions';
+    // После входа ищем незавершённую попытку, затем последний сохранённый результат.
+    afterRestoreRef.current = 'account';
+    setRestoredResultId(null);
     setBooting(SERVER_MODE);
     setAuth(next);
     if (!SERVER_MODE) setScreen('instructions');
@@ -229,6 +263,7 @@ export default function App() {
 
   function resetServerState() {
     clearAttemptRef();
+    setRestoredResultId(null);
     setSnap(EMPTY_SNAPSHOT);
     // Новый клиент попытки — со свежим состоянием: старый контроллер больше не нужен
     controllerRef.current?.dispose();
@@ -246,6 +281,17 @@ export default function App() {
     setSession(null);
     setStartedAt(null);
     setClientAttemptId(generateId());
+    if (window.location.hash) window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    setScreen('start');
+  }
+
+  function openCabinet() {
+    window.location.hash = '/account';
+    setScreen('account');
+  }
+
+  function leaveCabinet() {
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
     setScreen('start');
   }
 
@@ -310,6 +356,16 @@ export default function App() {
 
   function renderServerScreen() {
     const st = snap.state;
+    if (screen === 'results' && token && restoredResultId) {
+      return (
+        <ResultsGate
+          key={restoredResultId}
+          load={signal => attemptService.result(token, restoredResultId, { signal })}
+          onRetake={handleRetake}
+          onAccount={openCabinet}
+        />
+      );
+    }
     if (snap.phase === 'error') {
       return (
         <AttemptStatusScreen
@@ -347,6 +403,7 @@ export default function App() {
           key={attemptId}
           load={signal => attemptService.finish(token, attemptId, { signal })}
           onRetake={handleRetake}
+          onAccount={openCabinet}
         />
       );
     }
@@ -377,6 +434,7 @@ export default function App() {
             }
             localFallback={() => buildLocalResult(session.answers, clientAttemptId)}
             onRetake={handleRetake}
+            onAccount={auth ? openCabinet : undefined}
           />
         )}
       </>
@@ -393,6 +451,7 @@ export default function App() {
       <StartScreen
         onStart={handleStart}
         onUserAccess={() => setScreen('auth')}
+        onAccount={auth ? openCabinet : undefined}
         showEntryLinks={authService.enabled}
         userName={auth?.user.displayName ?? null}
         onLogout={authService.enabled && auth ? handleLogout : undefined}
@@ -400,6 +459,16 @@ export default function App() {
     );
   } else if (screen === 'auth') {
     body = <AuthScreen onAuthenticated={handleAuthenticated} onBack={() => setScreen('start')} />;
+  } else if (screen === 'account' && auth) {
+    body = (
+      <UserCabinet
+        user={auth.user}
+        token={auth.accessToken}
+        onBack={leaveCabinet}
+        onStart={() => setScreen('instructions')}
+        onLogout={handleLogout}
+      />
+    );
   } else if (screen === 'instructions') {
     body = <InstructionsScreen onBegin={handleBegin} onBack={() => setScreen('start')} />;
   } else if (SERVER_MODE) {

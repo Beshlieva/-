@@ -1,0 +1,31 @@
+-- 005: синхронизируем имена иконок категорий с lucide-react.
+-- Миграция подготовлена, но не запускалась по требованию.
+UPDATE `categories` SET `icon` = 'Atom' WHERE `id` = 1;
+UPDATE `categories` SET `icon` = 'Sigma' WHERE `id` = 2;
+UPDATE `categories` SET `icon` = 'FlaskConical' WHERE `id` = 3;
+UPDATE `categories` SET `icon` = 'Leaf' WHERE `id` = 4;
+UPDATE `categories` SET `icon` = 'HeartPulse' WHERE `id` = 5;
+UPDATE `categories` SET `icon` = 'Sprout' WHERE `id` = 6;
+UPDATE `categories` SET `icon` = 'Trees' WHERE `id` = 7;
+UPDATE `categories` SET `icon` = 'Globe2' WHERE `id` = 8;
+UPDATE `categories` SET `icon` = 'Wrench' WHERE `id` = 9;
+UPDATE `categories` SET `icon` = 'Cpu' WHERE `id` = 10;
+UPDATE `categories` SET `icon` = 'MonitorSmartphone' WHERE `id` = 11;
+UPDATE `categories` SET `icon` = 'Building2' WHERE `id` = 12;
+UPDATE `categories` SET `icon` = 'Plane' WHERE `id` = 13;
+UPDATE `categories` SET `icon` = 'Hammer' WHERE `id` = 14;
+UPDATE `categories` SET `icon` = 'Scissors' WHERE `id` = 15;
+UPDATE `categories` SET `icon` = 'ChefHat' WHERE `id` = 16;
+UPDATE `categories` SET `icon` = 'ScrollText' WHERE `id` = 17;
+UPDATE `categories` SET `icon` = 'BookOpenText' WHERE `id` = 18;
+UPDATE `categories` SET `icon` = 'Brain' WHERE `id` = 19;
+UPDATE `categories` SET `icon` = 'Scale' WHERE `id` = 20;
+UPDATE `categories` SET `icon` = 'BarChart3' WHERE `id` = 21;
+UPDATE `categories` SET `icon` = 'BookOpenText' WHERE `id` = 22;
+UPDATE `categories` SET `icon` = 'Languages' WHERE `id` = 23;
+UPDATE `categories` SET `icon` = 'Newspaper' WHERE `id` = 24;
+UPDATE `categories` SET `icon` = 'Palette' WHERE `id` = 25;
+UPDATE `categories` SET `icon` = 'Music4' WHERE `id` = 26;
+UPDATE `categories` SET `icon` = 'Dumbbell' WHERE `id` = 27;
+UPDATE `categories` SET `icon` = 'Users' WHERE `id` = 28;
+UPDATE `categories` SET `icon` = 'Shield' WHERE `id` = 29;

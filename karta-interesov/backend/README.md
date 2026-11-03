@@ -24,12 +24,17 @@ REST API без фреймворков и Composer-зависимостей: PDO
    в консоли; в БД сохраняется только хэш). Смена пароля: добавьте `--reset-password`.
    Только для закрытой локальной разработки можно разрешить пароль от 8 символов флагом
    `--allow-weak-local-password`; этот флаг отклоняется при `APP_ENV=production` и не должен использоваться на сервере.
-5. **Запустите API:** `php -S localhost:8000 -t public public/index.php`
-6. **Проверьте:** откройте `http://localhost:8000/api/v1/health` → `{"status":"ok"}`, затем `/api/v1/questions`.
+5. **Запустите API:** `php -S 127.0.0.1:8000 -t public public/index.php`
+6. **Проверьте:** откройте `http://127.0.0.1:8000/api/v1/health` → `{"status":"ok"}`, затем `/api/v1/questions`.
 7. **Сверка данных:** `php bin/verify-db.php` — сравнивает БД с `docs/data/*.json`.
 
-Frontend: `VITE_API_BASE_URL=http://localhost:8000/api/v1` (значение по умолчанию в `../.env.example`).
-Origin frontend должен быть в `CORS_ALLOWED_ORIGINS` (по умолчанию `http://localhost:5173`).
+Frontend: `VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1` (значение по умолчанию в `../.env.example`).
+Origin frontend должен быть в `CORS_ALLOWED_ORIGINS` (в шаблоне разрешены `http://localhost:5173` и
+`http://127.0.0.1:5173`).
+
+В PowerShell команду frontend запускайте через `npm.cmd`, если выполнение сценария `npm.ps1` запрещено политикой
+PowerShell. Для текущей переносимой установки MySQL в `%LOCALAPPDATA%\mysql-8.4\mysql-8.4.9-winx64` доступны
+задачи VS Code **Karta: MySQL (portable install)**, **Karta: PHP API** и **Karta: Vite**; запускайте их по порядку.
 
 > **Этап 4:** frontend в режиме `api` проходит тест по серверным методам (попытка → ответы по одному → пропуски →
 > повторный круг → `finish`). Пакетный `POST /attempts` с массивом `answers` по-прежнему отклоняется (`BATCH_SUBMIT_NOT_SUPPORTED`),
@@ -37,7 +42,7 @@ Origin frontend должен быть в `CORS_ALLOWED_ORIGINS` (по умолч
 
 ### Пример сценария (PowerShell)
 ```powershell
-$api = "http://localhost:8000/api/v1"
+$api = "http://127.0.0.1:8000/api/v1"
 $u = Invoke-RestMethod -Method Post -Uri "$api/users" -ContentType "application/json" -Body '{"regionCode":"zhambyl"}'
 $h = @{ Authorization = "Bearer $($u.accessToken)" }
 $a = Invoke-RestMethod -Method Post -Uri "$api/attempts" -Headers $h -ContentType "application/json" -Body '{"clientAttemptId":"demo-attempt-0001"}'

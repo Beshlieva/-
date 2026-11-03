@@ -1,3 +1,4 @@
+import CategoryIcon from './CategoryIcon';
 import { CATEGORIES, toDisplay } from '../data/questions';
 
 interface AllDirectionsChartProps {
@@ -40,7 +41,9 @@ export default function AllDirectionsChart({ scores, onSelect }: AllDirectionsCh
           >
             <div className="flex items-center gap-3">
               {/* Icon */}
-              <span className="text-lg w-7 text-center shrink-0">{cat.icon}</span>
+              <span className="text-lg w-7 text-center shrink-0">
+                <CategoryIcon name={cat.icon} size={16} color={cat.color} />
+              </span>
 
               {/* Name */}
               <span

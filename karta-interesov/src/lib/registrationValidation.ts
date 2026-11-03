@@ -54,6 +54,10 @@ export function parseAge(value: string): { age: number } | { error: string } {
 }
 
 /** Проверка формы регистрации. Пустой объект — ошибок нет. Сообщения на русском языке. */
+function normalizeRegionValue(value: string): string {
+  return value.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
 export function validateRegistration(values: RegistrationValues): FieldErrors {
   const errors: FieldErrors = {};
 
@@ -68,8 +72,11 @@ export function validateRegistration(values: RegistrationValues): FieldErrors {
   const age = parseAge(values.age);
   if ('error' in age) errors.age = age.error;
 
-  if (values.regionCode === '') errors.regionCode = 'Выберите регион.';
-  else if (!REGIONS.some(r => r.code === values.regionCode)) errors.regionCode = 'Выберите регион из списка.';
+  const regionValue = normalizeRegionValue(values.regionCode);
+  if (regionValue === '') errors.regionCode = 'Выберите регион.';
+  else if (!REGIONS.some(r => normalizeRegionValue(r.code) === regionValue || normalizeRegionValue(r.name) === regionValue)) {
+    errors.regionCode = 'Выберите регион из списка.';
+  }
 
   const pw = validatePassword(values.password);
   if (pw) errors.password = pw;

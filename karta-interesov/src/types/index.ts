@@ -16,7 +16,7 @@ export type AnswersMap = Record<number, number>;
 export const TEST_VERSION = 'golomshtok-174-v1';
 
 /** Экраны приложения (в приложении нет роутера — экран хранится в состоянии App). */
-export type AppScreen = 'start' | 'auth' | 'instructions' | 'test' | 'completion' | 'results';
+export type AppScreen = 'start' | 'auth' | 'account' | 'instructions' | 'test' | 'completion' | 'results';
 
 /**
  * Данные респондента. Сейчас интерфейс их не собирает — тип подготовлен для будущей аналитики
@@ -100,6 +100,12 @@ export interface TestResult {
   source: ResultSource;
   /** true — попытка сохранена на сервере. В демо-режиме всегда false. */
   persisted: boolean;
+}
+
+/** Завершённый результат, загруженный из личной истории пользователя. */
+export interface UserTestResult extends TestResult {
+  completedAt: string;
+  topCategoryIds: number[];
 }
 
 // ───────────────────────── Серверная попытка (этап 4) ─────────────────────────

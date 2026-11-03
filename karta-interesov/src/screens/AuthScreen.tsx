@@ -31,7 +31,8 @@ export default function AuthScreen({ onAuthenticated, onBack }: AuthScreenProps)
 
   function setField(name: keyof RegistrationValues) {
     return (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const value = e.target.value;
+      const raw = e.target.value;
+      const value = name === 'regionCode' ? raw.trim() : raw;
       setValues(prev => ({ ...prev, [name]: value }));
       setErrors(prev => (prev[name] ? { ...prev, [name]: undefined } : prev));
       setFormError(null);

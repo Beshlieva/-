@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CATEGORIES, toDisplay } from '../data/questions';
+import CategoryIcon from '../components/CategoryIcon';
 import Top5Chart from '../components/Top5Chart';
 import AllDirectionsChart from '../components/AllDirectionsChart';
 import AllDirectionsRose from '../components/AllDirectionsRose';
@@ -16,6 +17,7 @@ interface ResultsScreenProps {
   /** true — попытка сохранена на сервере. */
   persisted: boolean;
   onRetake: () => void;
+  onAccount?: () => void;
 }
 
 function ScoreBar({ score, color }: { score: number; color: string }) {
@@ -51,8 +53,8 @@ function DetailCard({ categoryId, score, onClose }: DetailCardProps) {
         <button type="button" className="modal__close" onClick={onClose} aria-label="Закрыть">✕</button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-          <div style={{ width: 52, height: 52, borderRadius: 14, display: 'grid', placeItems: 'center', fontSize: '1.5rem', background: cat.color + '1a', flex: 'none' }} aria-hidden="true">
-            {cat.icon}
+          <div style={{ width: 52, height: 52, borderRadius: 14, display: 'grid', placeItems: 'center', background: cat.color + '1a', flex: 'none' }} aria-hidden="true">
+            <CategoryIcon name={cat.icon} size={24} color={cat.color} />
           </div>
           <div>
             <p className="small muted">Направление {cat.id} из {CATEGORIES.length}</p>
@@ -81,7 +83,7 @@ function DetailCard({ categoryId, score, onClose }: DetailCardProps) {
   );
 }
 
-export default function ResultsScreen({ scores, answeredCount, source, persisted, onRetake }: ResultsScreenProps) {
+export default function ResultsScreen({ scores, answeredCount, source, persisted, onRetake, onAccount }: ResultsScreenProps) {
   const [activeDetail, setActiveDetail] = useState<number | null>(null);
   const [tab, setTab] = useState<'chart' | 'all' | 'rose'>('chart');
 
@@ -102,7 +104,7 @@ export default function ResultsScreen({ scores, answeredCount, source, persisted
 
   return (
     <div className="shell">
-      <AppHeader />
+      <AppHeader right={onAccount ? <button type="button" className="link-btn" onClick={onAccount}>Личный кабинет</button> : undefined} />
 
       <main className="page">
         <div className="container container--narrow">
@@ -152,7 +154,9 @@ export default function ResultsScreen({ scores, answeredCount, source, persisted
                     onClick={() => setActiveDetail(cat.id)}
                   >
                     <span className="top-item__rank">{i + 1}</span>
-                    <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', background: cat.color + '1a', flex: 'none' }} aria-hidden="true">{cat.icon}</span>
+                    <span style={{ width: 36, height: 36, borderRadius: 10, display: 'grid', placeItems: 'center', background: cat.color + '1a', flex: 'none' }} aria-hidden="true">
+                      <CategoryIcon name={cat.icon} size={17} color={cat.color} />
+                    </span>
                     <span style={{ flex: 1, minWidth: 0 }}>
                       <span style={{ display: 'block', fontWeight: 600, color: 'var(--navy)' }}>{cat.name}</span>
                       <span className="small muted" style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cat.description}</span>
@@ -190,6 +194,18 @@ export default function ResultsScreen({ scores, answeredCount, source, persisted
           </div>
 
           <div style={{ textAlign: 'center', marginTop: 28 }}>
+            <a
+              href="https://univision.kz/edu-program/search.html"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn--primary"
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              Подбор образовательной программы
+            </a>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: 16 }}>
             <button type="button" className="btn btn--ghost" onClick={handleRetake}>Пройти тест заново</button>
           </div>
         </div>

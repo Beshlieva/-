@@ -197,6 +197,23 @@ class FakeServer implements AttemptService {
     if (!a.result) throw httpError(409, 'ATTEMPT_NOT_COMPLETED');
     return a.result;
   }
+  async latestResult(_t: string): Promise<TestResult | null> {
+    await this.net();
+    return [...this.attempts.values()].reverse().find(a => a.result !== null)?.result ?? null;
+  }
+  async resultsHistory(_t: string, page: number) {
+    await this.net();
+    const results = [...this.attempts.values()]
+      .filter((attempt): attempt is Attempt & { result: TestResult } => attempt.result !== null)
+      .reverse()
+      .map(({ result }) => ({
+        ...result,
+        completedAt: result.calculatedAt,
+        topCategoryIds: result.scores.slice().sort((a, b) => b.rawScore - a.rawScore || a.categoryId - b.categoryId).slice(0, 5).map(score => score.categoryId),
+      }));
+    const pageSize = 10;
+    return { items: results.slice((page - 1) * pageSize, page * pageSize), page, pageSize, total: results.length };
+  }
 }
 
 function makeController(server: FakeServer) {
@@ -345,6 +362,9 @@ async function main() {
   const expected = calculateResults(mapAll);
   check('баллы по всем 29 направлениям совпадают с calculateResults', r1.scores.length === 29 && r1.scores.every(sc => sc.rawScore === expected[sc.categoryId] && sc.displayScore === toDisplay(expected[sc.categoryId])));
   check('результат помечен как сохранённый на сервере', r1.source === 'server' && r1.persisted === true && r1.answeredCount === TOTAL);
+  check('последний завершённый результат доступен для восстановления', await s9.latestResult('x') === r1);
+  const history = await s9.resultsHistory('x', 1);
+  check('история текущего пользователя содержит завершённый результат', history.total === 1 && history.items[0].attemptId === r1.attemptId);
   // после завершения: обновление страницы возвращает завершённую попытку, ответы не принимаются
   const after = makeController(s9); const ra = await after.restore('1');
   check('после завершения: восстановление показывает status=completed', ra?.status === 'completed');

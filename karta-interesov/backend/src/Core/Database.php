@@ -17,12 +17,20 @@ final class Database
             $c->dbPort,
             $withDatabase ? 'dbname=' . $c->dbName . ';' : '',
         );
-        return new PDO($dsn, $c->dbUser, $c->dbPassword, [
+
+        $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             // Нативные подготовленные запросы: значения никогда не подставляются в SQL-текст
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET time_zone = '+00:00'",
-        ]);
+        ];
+
+        if ($c->dbSslCa !== null && is_file($c->dbSslCa)) {
+            $options[PDO::MYSQL_ATTR_SSL_CA] = $c->dbSslCa;
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+        }
+
+        return new PDO($dsn, $c->dbUser, $c->dbPassword, $options);
     }
 }

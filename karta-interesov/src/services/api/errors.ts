@@ -5,7 +5,7 @@ export function describeError(err: unknown): string {
   if (err instanceof ApiError) {
     switch (err.code) {
       case 'NETWORK':
-        return 'Не удалось связаться с сервером. Проверьте подключение к интернету.';
+        return 'Не удалось связаться с сервером теста. Проверьте, запущены ли PHP API и MySQL, и адрес подключения.';
       case 'TIMEOUT':
         return 'Сервер не ответил вовремя. Попробуйте ещё раз.';
       case 'HTTP':

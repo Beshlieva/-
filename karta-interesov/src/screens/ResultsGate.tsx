@@ -17,6 +17,7 @@ interface ResultsGateProps {
    */
   localFallback?: () => TestResult;
   onRetake: () => void;
+  onAccount?: () => void;
 }
 
 type GateState =
@@ -29,7 +30,7 @@ type GateState =
  * Состояния: загрузка → результат | ошибка (с повтором и показом результата без сохранения).
  * Вызывается только когда на все вопросы есть ответы (проверяет App).
  */
-export default function ResultsGate({ load, localFallback, onRetake }: ResultsGateProps) {
+export default function ResultsGate({ load, localFallback, onRetake, onAccount }: ResultsGateProps) {
   const [state, setState] = useState<GateState>({ status: 'loading' });
   const [attempt, setAttempt] = useState(0);
   const loadRef = useRef(load);
@@ -59,6 +60,7 @@ export default function ResultsGate({ load, localFallback, onRetake }: ResultsGa
         source={result.source}
         persisted={result.persisted}
         onRetake={onRetake}
+        onAccount={onAccount}
       />
     );
   }

@@ -1,9 +1,9 @@
 import { ApiError } from '../../types';
-import type { ServerAttemptState, TestResult } from '../../types';
+import type { Paginated, ServerAttemptState, TestResult, UserTestResult } from '../../types';
 import type { ApiConfig } from './config';
 import { serverErrorCode } from './errors';
 import { createHttpClient } from './http';
-import { parseAttemptState, parseTestResult } from './validators';
+import { parseAttemptState, parseTestResult, parseUserResultHistory } from './validators';
 
 export interface AttemptCallOptions {
   signal?: AbortSignal;
@@ -39,6 +39,10 @@ export interface AttemptService {
   finish(token: string, attemptId: string, options?: AttemptCallOptions): Promise<TestResult>;
   /** GET /attempts/{id}/result */
   result(token: string, attemptId: string, options?: AttemptCallOptions): Promise<TestResult>;
+  /** GET /attempts/latest-result — последний сохранённый результат пользователя. */
+  latestResult(token: string, options?: AttemptCallOptions): Promise<TestResult | null>;
+  /** GET /users/me/results — постраничная история завершённых тестов текущего пользователя. */
+  resultsHistory(token: string, page: number, options?: AttemptCallOptions): Promise<Paginated<UserTestResult>>;
 }
 
 /** Тело ошибки сервера → поле error.details (или null). */
@@ -78,6 +82,8 @@ export function createAttemptService(config: ApiConfig): AttemptService {
       enabled: false,
       start: unavailable, active: unavailable, get: unavailable, answer: unavailable,
       skip: unavailable, retryRound: unavailable, finish: unavailable, result: unavailable,
+      latestResult: unavailable,
+      resultsHistory: unavailable,
     };
   }
 
@@ -145,6 +151,20 @@ export function createAttemptService(config: ApiConfig): AttemptService {
     },
     async result(token, attemptId, options) {
       return parseTestResult(await http.request(path(attemptId, '/result'), { token, signal: options?.signal }));
+    },
+    async latestResult(token, options) {
+      try {
+        return parseTestResult(await http.request('/attempts/latest-result', { token, signal: options?.signal }));
+      } catch (err) {
+        if (serverErrorCode(err) === 'NO_COMPLETED_RESULT') return null;
+        throw err;
+      }
+    },
+    async resultsHistory(token, page, options) {
+      const data = await http.request(`/users/me/results?page=${encodeURIComponent(String(page))}`, {
+        token, signal: options?.signal,
+      });
+      return parseUserResultHistory(data);
     },
   };
 }

@@ -16,6 +16,7 @@ import type {
   ServerAttemptState,
   SubmitAttemptRequest,
   TestResult,
+  UserTestResult,
 } from '../../types';
 
 const CATEGORY_IDS = new Set(CATEGORIES.map(c => c.id));
@@ -89,6 +90,7 @@ export function parseTestResult(data: unknown): TestResult {
     if (!Number.isInteger(rawScore) || Math.abs(rawScore) > MAX_RAW) {
       bad(`балл направления ${categoryId} вне диапазона ±${MAX_RAW}`);
     }
+
     const displayScore = typeof r.displayScore === 'number' ? r.displayScore : toDisplay(rawScore);
     byId.set(categoryId, { categoryId, rawScore, displayScore });
   }
@@ -103,6 +105,21 @@ export function parseTestResult(data: unknown): TestResult {
     source: 'server',
     persisted: d.persisted === false ? false : true,
   };
+}
+
+export function parseUserTestResult(data: unknown): UserTestResult {
+  const d = rec(data, 'результат участника');
+  const result = parseTestResult(data);
+  const topCategoryIds = list(d, 'topCategoryIds').map(id => {
+    if (typeof id !== 'number' || !CATEGORY_IDS.has(id)) bad('неизвестное направление в топе результата');
+    return id;
+  });
+  if (topCategoryIds.length !== Math.min(5, CATEGORIES.length)) bad('топ результата должен содержать пять направлений');
+  return { ...result, completedAt: str(d, 'completedAt'), topCategoryIds };
+}
+
+export function parseUserResultHistory(data: unknown): Paginated<UserTestResult> {
+  return page(data, row => parseUserTestResult(row));
 }
 
 function parseCategoryAggregate(v: unknown): CategoryAggregate {

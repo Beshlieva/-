@@ -172,6 +172,8 @@ final class App
         // Попытки (только владелец, по токену пользователя)
         $r->add('POST', '/attempts', $h(AttemptController::class, 'create'), 'user');
         $r->add('GET', '/attempts/active', $h(AttemptController::class, 'active'), 'user');
+        $r->add('GET', '/attempts/latest-result', $h(AttemptController::class, 'latestResult'), 'user');
+        $r->add('GET', '/users/me/results', $h(AttemptController::class, 'history'), 'user');
         $r->add('GET', '/attempts/{id}', $h(AttemptController::class, 'show'), 'user');
         $r->add('POST', '/attempts/{id}/answers', $h(AttemptController::class, 'answer'), 'user');
         $r->add('POST', '/attempts/{id}/skips', $h(AttemptController::class, 'skip'), 'user');

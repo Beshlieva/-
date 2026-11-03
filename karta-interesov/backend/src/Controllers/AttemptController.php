@@ -105,4 +105,27 @@ final class AttemptController
     {
         return Response::json(200, $this->attempts->result($ctx['user']['id'], (int) $params['id']));
     }
+
+    /** GET /attempts/latest-result — последний результат только текущего пользователя. */
+    public function latestResult(Request $r, array $params, array $ctx): Response
+    {
+        $result = $this->attempts->latestCompletedResult($ctx['user']['id']);
+        if ($result === null) {
+            throw new HttpException(404, 'NO_COMPLETED_RESULT', 'Сохранённого результата пока нет.');
+        }
+        return Response::json(200, $result);
+    }
+
+    /** GET /users/me/results — история только текущего пользователя. */
+    public function history(Request $r, array $params, array $ctx): Response
+    {
+        $rawPage = $r->queryString('page');
+        $page = $rawPage === null ? 1 : filter_var($rawPage, FILTER_VALIDATE_INT);
+        if ($page === false || $page < 1 || $page > 1000000) {
+            throw new HttpException(422, 'VALIDATION_ERROR', 'Данные запроса не прошли проверку.', [
+                'fields' => ['page' => 'Номер страницы должен быть положительным целым числом.'],
+            ]);
+        }
+        return Response::json(200, $this->attempts->completedResults($ctx['user']['id'], $page));
+    }
 }

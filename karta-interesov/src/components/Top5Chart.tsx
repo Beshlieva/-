@@ -1,3 +1,4 @@
+import CategoryIcon from './CategoryIcon';
 import { CATEGORIES, toDisplay } from '../data/questions';
 
 interface Top5ChartProps {
@@ -12,13 +13,13 @@ const PALETTE = [
   { fill: '#7C5CE8', light: '#EDE9FE' },
 ];
 
-// Canvas — wide to give labels room on both sides
-const VW = 780;
-const VH = 600;
-const CX = VW / 2;   // 390
-const CY = VH / 2;   // 300
-const INNER_R = 30;
-const MAX_R   = 155;
+// Square canvas keeps the geometry stable on any screen width.
+const VW = 440;
+const VH = 440;
+const CX = VW / 2;
+const CY = VH / 2;
+const INNER_R = 24;
+const MAX_R = 150;
 const GAP_DEG = 3;
 
 function toRad(deg: number) { return (deg * Math.PI) / 180; }
@@ -51,8 +52,9 @@ export default function Top5Chart({ scores }: Top5ChartProps) {
     <div className="flex flex-col items-center gap-6 w-full">
       <svg
         viewBox={`0 0 ${VW} ${VH}`}
-        width="100%"
-        style={{ maxWidth: '100%', aspectRatio: `${VW}/${VH}`, overflow: 'visible' }}
+        width={440}
+        height={440}
+        style={{ maxWidth: '100%', aspectRatio: '1 / 1', overflow: 'visible' }}
         aria-label="Топ-5 профессиональных направлений"
       >
         {/* Guide rings */}
@@ -121,10 +123,6 @@ export default function Top5Chart({ scores }: Top5ChartProps) {
               <text x={lp.x} y={lp.y} textAnchor={anchor} fontSize="11.5" fontWeight="700" fill={fill} fontFamily="var(--font-sans)">
                 {cat.name}
               </text>
-              {/* Icon */}
-              <text x={ip.x} y={ip.y + 5} textAnchor={anchor} fontSize="14">
-                {cat.icon}
-              </text>
             </g>
           );
         })}
@@ -143,7 +141,9 @@ export default function Top5Chart({ scores }: Top5ChartProps) {
           return (
             <div key={cat.id} className="flex items-center gap-3 px-4 py-2.5 rounded-xl"
               style={{ backgroundColor: light, border: `1.5px solid ${fill}30` }}>
-              <span className="text-base shrink-0">{cat.icon}</span>
+              <span className="flex h-6 w-6 items-center justify-center shrink-0 rounded-md" style={{ backgroundColor: `${fill}20` }}>
+                <CategoryIcon name={cat.icon} size={14} color={fill} />
+              </span>
               <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: fill }} />
               <span className="text-sm font-semibold flex-1" style={{ color: '#0B1F3A' }}>{cat.name}</span>
               <span className="text-sm font-bold" style={{ color: fill, fontFamily: 'var(--font-display)' }}>
