@@ -1,0 +1,73 @@
+services:
+  - type: web
+    name: karta-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: API_BASE_PATH
+        value: /api/v1
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://karta-frontend.onrender.com
+      - key: DB_HOST
+        fromDatabase:
+          name: karta-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: karta-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: karta-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: karta-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: karta-db
+          property: password
+      - key: DB_SSL_CA
+        value: ""
+      - key: TEST_VERSION
+        value: golomshtok-174-v1
+      - key: QUESTION_TIME_MS
+        value: 15000
+      - key: ANSWER_GRACE_MS
+        value: 1000
+      - key: SKIP_TOLERANCE_MS
+        value: 1000
+      - key: ADMIN_TOKEN_TTL_MINUTES
+        value: 480
+      - key: ADMIN_MAX_FAILED_LOGINS
+        value: 5
+      - key: ADMIN_LOCK_MINUTES
+        value: 15
+
+  - type: static
+    name: karta-frontend
+    rootDir: .
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: VITE_API_MODE
+        value: api
+      - key: VITE_API_BASE_URL
+        value: https://karta-api.onrender.com/api/v1
+
+
+databases:
+  - name: karta-db
+    databaseName: karta_interesov
+    user: karta_user
+    plan: free
+    type: mysql

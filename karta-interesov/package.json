@@ -19,6 +19,7 @@
     "verify:all": "tsx scripts/verify.ts && tsx scripts/verify-server-flow.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "lucide-react": "^1.62.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
