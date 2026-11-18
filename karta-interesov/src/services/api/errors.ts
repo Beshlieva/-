@@ -5,14 +5,14 @@ export function describeError(err: unknown): string {
   if (err instanceof ApiError) {
     switch (err.code) {
       case 'NETWORK':
-        return 'Не удалось связаться с сервером теста. Проверьте, запущены ли PHP API и MySQL, и адрес подключения.';
+        return err.message || 'Не удалось связаться с сервером теста. Проверьте подключение к интернету.';
       case 'TIMEOUT':
         return 'Сервер не ответил вовремя. Попробуйте ещё раз.';
       case 'HTTP':
       case 'NOT_FOUND':
         return `Сервер вернул ошибку${err.status ? ` (${err.status})` : ''}${err.message ? `: ${err.message}` : '.'}`;
       case 'INVALID_RESPONSE':
-        return 'Сервер вернул данные в неожиданном формате.';
+        return err.message || 'Сервер вернул данные в неожиданном формате.';
       case 'BATCH_NOT_SUPPORTED':
       case 'NOT_CONFIGURED':
       case 'NOT_AVAILABLE_IN_DEMO':
@@ -22,6 +22,15 @@ export function describeError(err: unknown): string {
         return 'Запрос был отменён.';
     }
   }
+
+  if (err instanceof Error && err.message.trim()) {
+    return err.message.trim();
+  }
+
+  if (typeof err === 'string' && err.trim()) {
+    return err.trim();
+  }
+
   return 'Произошла непредвиденная ошибка.';
 }
 

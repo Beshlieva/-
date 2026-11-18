@@ -17,8 +17,25 @@ type Env = Record<string, string | undefined>;
 
 const DEFAULT_TIMEOUT_MS = 15000;
 
+/** Где хранятся данные: облачная база Supabase, прежний PHP API + MySQL или нигде (демо). */
+export type Backend = 'supabase' | 'php' | 'demo';
+
+/**
+ * VITE_APP_MODE=supabase|php|demo задаёт режим явно. Без него: есть VITE_SUPABASE_URL и
+ * VITE_SUPABASE_ANON_KEY → supabase; VITE_API_MODE=api → php; иначе — demo.
+ */
+export function resolveBackend(env: Env): Backend {
+  const explicit = (env.VITE_APP_MODE ?? '').trim().toLowerCase();
+  if (explicit === 'supabase' || explicit === 'php' || explicit === 'demo') return explicit;
+  if (env.VITE_SUPABASE_URL?.trim() && env.VITE_SUPABASE_ANON_KEY?.trim()) return 'supabase';
+  if ((env.VITE_API_MODE ?? '').trim().toLowerCase() === 'api') return 'php';
+  return 'demo';
+}
+
+/** Настройки PHP API. В режиме supabase адрес PHP API не нужен (baseUrl = null, ошибки конфигурации нет). */
 export function resolveApiConfig(env: Env): ApiConfig {
-  const rawMode = (env.VITE_API_MODE ?? 'api').trim().toLowerCase();
+  const backend = resolveBackend(env);
+  const rawMode = backend === 'demo' ? 'demo' : backend === 'supabase' ? 'supabase' : (env.VITE_API_MODE ?? 'api').trim().toLowerCase();
 
   let timeoutMs = DEFAULT_TIMEOUT_MS;
   const rawTimeout = env.VITE_API_TIMEOUT_MS?.trim();
@@ -29,6 +46,9 @@ export function resolveApiConfig(env: Env): ApiConfig {
 
   if (rawMode === 'demo') {
     return { mode: 'demo', baseUrl: null, timeoutMs, configError: null };
+  }
+  if (rawMode === 'supabase') {
+    return { mode: 'api', baseUrl: null, timeoutMs, configError: null };
   }
 
   if (rawMode !== 'api') {

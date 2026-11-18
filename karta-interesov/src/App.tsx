@@ -16,8 +16,10 @@ import type { AttemptSnapshot } from './lib/serverAttempt';
 import { viewFromLocal, viewFromServer } from './lib/testView';
 import { ApiError } from './types';
 import {
-  attemptService, authService, buildLocalResult, buildSubmitRequest, describeError, testService,
+  attemptService, authService, backend, buildLocalResult, buildSubmitRequest, describeError, testService,
 } from './services/api';
+import { supabase } from './lib/supabase';
+import { toAuthSession } from './lib/authService';
 import {
   answerQuestion, answeredCount, createSession, expireQuestion, isComplete, isRoundFinished,
   reconcileOnLoad, startRetryRound, totalQuestions, unansweredIds,
@@ -93,8 +95,12 @@ export default function App() {
 
   const token = auth?.accessToken ?? null;
   const userId = auth?.user.userId ?? null;
+  /** Актуальная сессия для обработчиков событий Supabase (замыкания видят устаревший state). */
+  const authRef = useRef<AuthSession | null>(initialAuth);
+  authRef.current = auth;
 
   const handleUnauthorized = useCallback(() => {
+    authRef.current = null;
     clearAuth();
     clearAttemptRef();
     setAuth(null);
@@ -103,6 +109,38 @@ export default function App() {
   }, []);
   const unauthorizedRef = useRef(handleUnauthorized);
   unauthorizedRef.current = handleUnauthorized;
+  const authenticatedRef = useRef<(next: AuthSession) => void>(() => undefined);
+
+  // Supabase: события сессии.
+  //  - вход по ссылке из письма подтверждения email (сессия приходит в адресе страницы) → входим в приложение;
+  //  - сессия завершена (выход в другой вкладке, истёк refresh-токен) → возвращаем на главную;
+  //  - токен обновлён → сохраняем новый (без перезапуска попытки).
+  useEffect(() => {
+    if (backend !== 'supabase' || !supabase) return;
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        if (authRef.current) unauthorizedRef.current();
+        return;
+      }
+      if (!session) return;
+      const current = authRef.current;
+      if (current && current.user.userId === session.user.id) {
+        if (event === 'TOKEN_REFRESHED' || current.accessToken !== session.access_token) {
+          saveAuth({ ...current, accessToken: session.access_token });
+        }
+        return;
+      }
+      if (!current && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
+        // Вызов Supabase внутри обработчика onAuthStateChange может зависнуть — откладываем
+        setTimeout(() => {
+          void toAuthSession(session)
+            .then(next => { if (!authRef.current) authenticatedRef.current(next); })
+            .catch(() => undefined);
+        }, 0);
+      }
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
 
   // Сохранённый токен мог устареть (выход на другом устройстве, новый вход): проверяем один раз при запуске.
   // Сетевая ошибка сессию не сбрасывает — вход пропадает только по ответу 401.
@@ -253,6 +291,15 @@ export default function App() {
 
   function handleAuthenticated(next: AuthSession) {
     saveAuth(next);
+    // Тот же пользователь уже вошёл (например, событие Supabase пришло одновременно с ответом формы входа):
+    // повторно запускать восстановление нельзя — экран загрузки не исчез бы.
+    const current = authRef.current;
+    if (current && current.user.userId === next.user.userId) {
+      authRef.current = next;
+      setScreen(prev => (prev === 'auth' ? (SERVER_MODE ? 'account' : 'instructions') : prev));
+      return;
+    }
+    authRef.current = next;
     // После входа ищем незавершённую попытку, затем последний сохранённый результат.
     afterRestoreRef.current = 'account';
     setRestoredResultId(null);
@@ -260,6 +307,7 @@ export default function App() {
     setAuth(next);
     if (!SERVER_MODE) setScreen('instructions');
   }
+  authenticatedRef.current = handleAuthenticated;
 
   function resetServerState() {
     clearAttemptRef();
@@ -271,6 +319,7 @@ export default function App() {
   }
 
   function handleLogout() {
+    authRef.current = null;
     const tokenToRevoke = auth?.accessToken;
     if (tokenToRevoke) void authService.logout(tokenToRevoke).catch(() => undefined); // токен аннулируется на сервере, если он доступен
     clearAuth();

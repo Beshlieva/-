@@ -26,6 +26,8 @@ export default function AuthScreen({ onAuthenticated, onBack }: AuthScreenProps)
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [duplicateEmail, setDuplicateEmail] = useState(false);
+  /** Информационное сообщение (например, «подтвердите email по ссылке из письма»). */
+  const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const submitting = useRef(false); // защита от двойного нажатия до перерисовки
 
@@ -44,6 +46,7 @@ export default function AuthScreen({ onAuthenticated, onBack }: AuthScreenProps)
     setMode(next);
     setErrors({});
     setFormError(null);
+    setInfo(null);
     setDuplicateEmail(false);
     setValues(prev => ({ ...EMPTY, email: keepEmail ? prev.email : '' }));
   }
@@ -73,6 +76,10 @@ export default function AuthScreen({ onAuthenticated, onBack }: AuthScreenProps)
       if (code === 'EMAIL_ALREADY_REGISTERED') {
         setDuplicateEmail(true);
         setErrors({ email: 'Этот email уже зарегистрирован.' });
+      } else if (code === 'EMAIL_CONFIRMATION_REQUIRED') {
+        // Учётная запись создана, но Supabase требует подтвердить email: переходим ко входу
+        switchMode('login', true);
+        setInfo(describeError(err));
       } else if (code === 'VALIDATION_ERROR') {
         const fields = serverFieldErrors(err);
         const mapped: FieldErrors = {};
@@ -106,6 +113,7 @@ export default function AuthScreen({ onAuthenticated, onBack }: AuthScreenProps)
     } catch (err) {
       const code = serverErrorCode(err);
       if (code === 'INVALID_CREDENTIALS') setFormError('Неверный email или пароль.');
+      else if (code === 'EMAIL_NOT_CONFIRMED') setInfo(describeError(err));
       else if (code === 'LOGIN_LOCKED') setFormError('Слишком много неудачных попыток входа. Подождите 15 минут и попробуйте снова.');
       else setFormError(describeError(err));
     } finally {
@@ -118,6 +126,7 @@ export default function AuthScreen({ onAuthenticated, onBack }: AuthScreenProps)
     if (submitting.current) return;
     submitting.current = true;
     setFormError(null);
+    setInfo(null);
     try {
       if (mode === 'register') await handleRegister();
       else await handleLogin();
@@ -185,6 +194,12 @@ export default function AuthScreen({ onAuthenticated, onBack }: AuthScreenProps)
           </div>
 
           <form className="card form" onSubmit={handleSubmit} noValidate>
+            {info && (
+              <div className="form-alert form-alert--info" role="status">
+                <IconAlert size={18} />
+                <span>{info}</span>
+              </div>
+            )}
             {formError && (
               <div className="form-alert" role="alert">
                 <IconAlert size={18} />

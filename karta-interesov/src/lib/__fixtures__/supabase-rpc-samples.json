@@ -1,0 +1,1961 @@
+{
+ "createEnvelope": {
+  "state": {
+   "round": 1,
+   "status": "in_progress",
+   "answers": [],
+   "attemptId": "2",
+   "canFinish": false,
+   "startedAt": "2026-11-18T04:35:53.998+00:00",
+   "serverTime": "2026-11-18T04:35:53.998+00:00",
+   "completedAt": null,
+   "testVersion": "golomshtok-174-v1",
+   "skippedCount": 0,
+   "answeredCount": 0,
+   "roundFinished": false,
+   "roundProgress": {
+    "size": 174,
+    "position": 1
+   },
+   "totalQuestions": 174,
+   "clientAttemptId": "client-attempt-1",
+   "currentQuestion": {
+    "openedAt": "2026-11-18T04:35:53.998+00:00",
+    "deadlineAt": "2026-11-18T04:36:08.998+00:00",
+    "questionId": 1,
+    "remainingMs": 15000,
+    "timeLimitMs": 15000
+   },
+   "skippedQuestionIds": []
+  },
+  "created": true
+ },
+ "tooEarly": {
+  "message": "TOO_EARLY",
+  "detail": "{\"message\": \"Время на вопрос ещё не истекло.\", \"remainingMs\": 14971}"
+ },
+ "expiredEnvelope": {
+  "state": {
+   "round": 1,
+   "status": "in_progress",
+   "answers": [],
+   "attemptId": "2",
+   "canFinish": false,
+   "startedAt": "2026-11-18T04:35:53.998+00:00",
+   "serverTime": "2026-11-18T04:35:54.05+00:00",
+   "completedAt": null,
+   "testVersion": "golomshtok-174-v1",
+   "skippedCount": 2,
+   "answeredCount": 0,
+   "roundFinished": false,
+   "roundProgress": {
+    "size": 174,
+    "position": 3
+   },
+   "totalQuestions": 174,
+   "clientAttemptId": "client-attempt-1",
+   "currentQuestion": {
+    "openedAt": "2026-11-18T04:35:54.05+00:00",
+    "deadlineAt": "2026-11-18T04:36:09.05+00:00",
+    "questionId": 3,
+    "remainingMs": 15000,
+    "timeLimitMs": 15000
+   },
+   "skippedQuestionIds": [
+    1,
+    2
+   ]
+  },
+  "outcome": "expired"
+ },
+ "retryEnvelope": {
+  "state": {
+   "round": 2,
+   "status": "in_progress",
+   "answers": [
+    {
+     "value": 1,
+     "questionId": 4
+    },
+    {
+     "value": -2,
+     "questionId": 5
+    },
+    {
+     "value": 0,
+     "questionId": 6
+    },
+    {
+     "value": 2,
+     "questionId": 7
+    },
+    {
+     "value": -1,
+     "questionId": 8
+    },
+    {
+     "value": 1,
+     "questionId": 9
+    },
+    {
+     "value": -2,
+     "questionId": 10
+    },
+    {
+     "value": 0,
+     "questionId": 11
+    },
+    {
+     "value": 2,
+     "questionId": 12
+    },
+    {
+     "value": -1,
+     "questionId": 13
+    },
+    {
+     "value": 1,
+     "questionId": 14
+    },
+    {
+     "value": -2,
+     "questionId": 15
+    },
+    {
+     "value": 0,
+     "questionId": 16
+    },
+    {
+     "value": 2,
+     "questionId": 17
+    },
+    {
+     "value": -1,
+     "questionId": 18
+    },
+    {
+     "value": 1,
+     "questionId": 19
+    },
+    {
+     "value": -2,
+     "questionId": 20
+    },
+    {
+     "value": 0,
+     "questionId": 21
+    },
+    {
+     "value": 2,
+     "questionId": 22
+    },
+    {
+     "value": -1,
+     "questionId": 23
+    },
+    {
+     "value": 1,
+     "questionId": 24
+    },
+    {
+     "value": -2,
+     "questionId": 25
+    },
+    {
+     "value": 0,
+     "questionId": 26
+    },
+    {
+     "value": 2,
+     "questionId": 27
+    },
+    {
+     "value": -1,
+     "questionId": 28
+    },
+    {
+     "value": 1,
+     "questionId": 29
+    },
+    {
+     "value": -2,
+     "questionId": 30
+    },
+    {
+     "value": 0,
+     "questionId": 31
+    },
+    {
+     "value": 2,
+     "questionId": 32
+    },
+    {
+     "value": -1,
+     "questionId": 33
+    },
+    {
+     "value": 1,
+     "questionId": 34
+    },
+    {
+     "value": -2,
+     "questionId": 35
+    },
+    {
+     "value": 0,
+     "questionId": 36
+    },
+    {
+     "value": 2,
+     "questionId": 37
+    },
+    {
+     "value": -1,
+     "questionId": 38
+    },
+    {
+     "value": 1,
+     "questionId": 39
+    },
+    {
+     "value": -2,
+     "questionId": 40
+    },
+    {
+     "value": 0,
+     "questionId": 41
+    },
+    {
+     "value": 2,
+     "questionId": 42
+    },
+    {
+     "value": -1,
+     "questionId": 43
+    },
+    {
+     "value": 1,
+     "questionId": 44
+    },
+    {
+     "value": -2,
+     "questionId": 45
+    },
+    {
+     "value": 0,
+     "questionId": 46
+    },
+    {
+     "value": 2,
+     "questionId": 47
+    },
+    {
+     "value": -1,
+     "questionId": 48
+    },
+    {
+     "value": 1,
+     "questionId": 49
+    },
+    {
+     "value": -2,
+     "questionId": 50
+    },
+    {
+     "value": 0,
+     "questionId": 51
+    },
+    {
+     "value": 2,
+     "questionId": 52
+    },
+    {
+     "value": -1,
+     "questionId": 53
+    },
+    {
+     "value": 1,
+     "questionId": 54
+    },
+    {
+     "value": -2,
+     "questionId": 55
+    },
+    {
+     "value": 0,
+     "questionId": 56
+    },
+    {
+     "value": 2,
+     "questionId": 57
+    },
+    {
+     "value": -1,
+     "questionId": 58
+    },
+    {
+     "value": 1,
+     "questionId": 59
+    },
+    {
+     "value": -2,
+     "questionId": 60
+    },
+    {
+     "value": 0,
+     "questionId": 61
+    },
+    {
+     "value": 2,
+     "questionId": 62
+    },
+    {
+     "value": -1,
+     "questionId": 63
+    },
+    {
+     "value": 1,
+     "questionId": 64
+    },
+    {
+     "value": -2,
+     "questionId": 65
+    },
+    {
+     "value": 0,
+     "questionId": 66
+    },
+    {
+     "value": 2,
+     "questionId": 67
+    },
+    {
+     "value": -1,
+     "questionId": 68
+    },
+    {
+     "value": 1,
+     "questionId": 69
+    },
+    {
+     "value": -2,
+     "questionId": 70
+    },
+    {
+     "value": 0,
+     "questionId": 71
+    },
+    {
+     "value": 2,
+     "questionId": 72
+    },
+    {
+     "value": -1,
+     "questionId": 73
+    },
+    {
+     "value": 1,
+     "questionId": 74
+    },
+    {
+     "value": -2,
+     "questionId": 75
+    },
+    {
+     "value": 0,
+     "questionId": 76
+    },
+    {
+     "value": 2,
+     "questionId": 77
+    },
+    {
+     "value": -1,
+     "questionId": 78
+    },
+    {
+     "value": 1,
+     "questionId": 79
+    },
+    {
+     "value": -2,
+     "questionId": 80
+    },
+    {
+     "value": 0,
+     "questionId": 81
+    },
+    {
+     "value": 2,
+     "questionId": 82
+    },
+    {
+     "value": -1,
+     "questionId": 83
+    },
+    {
+     "value": 1,
+     "questionId": 84
+    },
+    {
+     "value": -2,
+     "questionId": 85
+    },
+    {
+     "value": 0,
+     "questionId": 86
+    },
+    {
+     "value": 2,
+     "questionId": 87
+    },
+    {
+     "value": -1,
+     "questionId": 88
+    },
+    {
+     "value": 1,
+     "questionId": 89
+    },
+    {
+     "value": -2,
+     "questionId": 90
+    },
+    {
+     "value": 0,
+     "questionId": 91
+    },
+    {
+     "value": 2,
+     "questionId": 92
+    },
+    {
+     "value": -1,
+     "questionId": 93
+    },
+    {
+     "value": 1,
+     "questionId": 94
+    },
+    {
+     "value": -2,
+     "questionId": 95
+    },
+    {
+     "value": 0,
+     "questionId": 96
+    },
+    {
+     "value": 2,
+     "questionId": 97
+    },
+    {
+     "value": -1,
+     "questionId": 98
+    },
+    {
+     "value": 1,
+     "questionId": 99
+    },
+    {
+     "value": -2,
+     "questionId": 100
+    },
+    {
+     "value": 0,
+     "questionId": 101
+    },
+    {
+     "value": 2,
+     "questionId": 102
+    },
+    {
+     "value": -1,
+     "questionId": 103
+    },
+    {
+     "value": 1,
+     "questionId": 104
+    },
+    {
+     "value": -2,
+     "questionId": 105
+    },
+    {
+     "value": 0,
+     "questionId": 106
+    },
+    {
+     "value": 2,
+     "questionId": 107
+    },
+    {
+     "value": -1,
+     "questionId": 108
+    },
+    {
+     "value": 1,
+     "questionId": 109
+    },
+    {
+     "value": -2,
+     "questionId": 110
+    },
+    {
+     "value": 0,
+     "questionId": 111
+    },
+    {
+     "value": 2,
+     "questionId": 112
+    },
+    {
+     "value": -1,
+     "questionId": 113
+    },
+    {
+     "value": 1,
+     "questionId": 114
+    },
+    {
+     "value": -2,
+     "questionId": 115
+    },
+    {
+     "value": 0,
+     "questionId": 116
+    },
+    {
+     "value": 2,
+     "questionId": 117
+    },
+    {
+     "value": -1,
+     "questionId": 118
+    },
+    {
+     "value": 1,
+     "questionId": 119
+    },
+    {
+     "value": -2,
+     "questionId": 120
+    },
+    {
+     "value": 0,
+     "questionId": 121
+    },
+    {
+     "value": 2,
+     "questionId": 122
+    },
+    {
+     "value": -1,
+     "questionId": 123
+    },
+    {
+     "value": 1,
+     "questionId": 124
+    },
+    {
+     "value": -2,
+     "questionId": 125
+    },
+    {
+     "value": 0,
+     "questionId": 126
+    },
+    {
+     "value": 2,
+     "questionId": 127
+    },
+    {
+     "value": -1,
+     "questionId": 128
+    },
+    {
+     "value": 1,
+     "questionId": 129
+    },
+    {
+     "value": -2,
+     "questionId": 130
+    },
+    {
+     "value": 0,
+     "questionId": 131
+    },
+    {
+     "value": 2,
+     "questionId": 132
+    },
+    {
+     "value": -1,
+     "questionId": 133
+    },
+    {
+     "value": 1,
+     "questionId": 134
+    },
+    {
+     "value": -2,
+     "questionId": 135
+    },
+    {
+     "value": 0,
+     "questionId": 136
+    },
+    {
+     "value": 2,
+     "questionId": 137
+    },
+    {
+     "value": -1,
+     "questionId": 138
+    },
+    {
+     "value": 1,
+     "questionId": 139
+    },
+    {
+     "value": -2,
+     "questionId": 140
+    },
+    {
+     "value": 0,
+     "questionId": 141
+    },
+    {
+     "value": 2,
+     "questionId": 142
+    },
+    {
+     "value": -1,
+     "questionId": 143
+    },
+    {
+     "value": 1,
+     "questionId": 144
+    },
+    {
+     "value": -2,
+     "questionId": 145
+    },
+    {
+     "value": 0,
+     "questionId": 146
+    },
+    {
+     "value": 2,
+     "questionId": 147
+    },
+    {
+     "value": -1,
+     "questionId": 148
+    },
+    {
+     "value": 1,
+     "questionId": 149
+    },
+    {
+     "value": -2,
+     "questionId": 150
+    },
+    {
+     "value": 0,
+     "questionId": 151
+    },
+    {
+     "value": 2,
+     "questionId": 152
+    },
+    {
+     "value": -1,
+     "questionId": 153
+    },
+    {
+     "value": 1,
+     "questionId": 154
+    },
+    {
+     "value": -2,
+     "questionId": 155
+    },
+    {
+     "value": 0,
+     "questionId": 156
+    },
+    {
+     "value": 2,
+     "questionId": 157
+    },
+    {
+     "value": -1,
+     "questionId": 158
+    },
+    {
+     "value": 1,
+     "questionId": 159
+    },
+    {
+     "value": -2,
+     "questionId": 160
+    },
+    {
+     "value": 0,
+     "questionId": 161
+    },
+    {
+     "value": 2,
+     "questionId": 162
+    },
+    {
+     "value": -1,
+     "questionId": 163
+    },
+    {
+     "value": 1,
+     "questionId": 164
+    },
+    {
+     "value": -2,
+     "questionId": 165
+    },
+    {
+     "value": 0,
+     "questionId": 166
+    },
+    {
+     "value": 2,
+     "questionId": 167
+    },
+    {
+     "value": -1,
+     "questionId": 168
+    },
+    {
+     "value": 1,
+     "questionId": 169
+    },
+    {
+     "value": -2,
+     "questionId": 170
+    },
+    {
+     "value": 0,
+     "questionId": 171
+    },
+    {
+     "value": 2,
+     "questionId": 172
+    },
+    {
+     "value": -1,
+     "questionId": 173
+    },
+    {
+     "value": 1,
+     "questionId": 174
+    }
+   ],
+   "attemptId": "2",
+   "canFinish": false,
+   "startedAt": "2026-11-18T04:35:53.998+00:00",
+   "serverTime": "2026-11-18T04:35:54.733+00:00",
+   "completedAt": null,
+   "testVersion": "golomshtok-174-v1",
+   "skippedCount": 3,
+   "answeredCount": 171,
+   "roundFinished": false,
+   "roundProgress": {
+    "size": 3,
+    "position": 1
+   },
+   "totalQuestions": 174,
+   "clientAttemptId": "client-attempt-1",
+   "currentQuestion": {
+    "openedAt": "2026-11-18T04:35:54.733+00:00",
+    "deadlineAt": "2026-11-18T04:36:09.733+00:00",
+    "questionId": 1,
+    "remainingMs": 15000,
+    "timeLimitMs": 15000
+   },
+   "skippedQuestionIds": [
+    1,
+    2,
+    3
+   ]
+  }
+ },
+ "finishEnvelope": {
+  "result": {
+   "scores": [
+    {
+     "rank": 13,
+     "rawScore": 0,
+     "categoryId": 1,
+     "displayScore": 50
+    },
+    {
+     "rank": 1,
+     "rawScore": 2,
+     "categoryId": 2,
+     "displayScore": 58
+    },
+    {
+     "rank": 19,
+     "rawScore": -1,
+     "categoryId": 3,
+     "displayScore": 46
+    },
+    {
+     "rank": 7,
+     "rawScore": 1,
+     "categoryId": 4,
+     "displayScore": 54
+    },
+    {
+     "rank": 25,
+     "rawScore": -2,
+     "categoryId": 5,
+     "displayScore": 42
+    },
+    {
+     "rank": 14,
+     "rawScore": 0,
+     "categoryId": 6,
+     "displayScore": 50
+    },
+    {
+     "rank": 2,
+     "rawScore": 2,
+     "categoryId": 7,
+     "displayScore": 58
+    },
+    {
+     "rank": 20,
+     "rawScore": -1,
+     "categoryId": 8,
+     "displayScore": 46
+    },
+    {
+     "rank": 8,
+     "rawScore": 1,
+     "categoryId": 9,
+     "displayScore": 54
+    },
+    {
+     "rank": 26,
+     "rawScore": -2,
+     "categoryId": 10,
+     "displayScore": 42
+    },
+    {
+     "rank": 15,
+     "rawScore": 0,
+     "categoryId": 11,
+     "displayScore": 50
+    },
+    {
+     "rank": 3,
+     "rawScore": 2,
+     "categoryId": 12,
+     "displayScore": 58
+    },
+    {
+     "rank": 21,
+     "rawScore": -1,
+     "categoryId": 13,
+     "displayScore": 46
+    },
+    {
+     "rank": 9,
+     "rawScore": 1,
+     "categoryId": 14,
+     "displayScore": 54
+    },
+    {
+     "rank": 27,
+     "rawScore": -2,
+     "categoryId": 15,
+     "displayScore": 42
+    },
+    {
+     "rank": 16,
+     "rawScore": 0,
+     "categoryId": 16,
+     "displayScore": 50
+    },
+    {
+     "rank": 4,
+     "rawScore": 2,
+     "categoryId": 17,
+     "displayScore": 58
+    },
+    {
+     "rank": 22,
+     "rawScore": -1,
+     "categoryId": 18,
+     "displayScore": 46
+    },
+    {
+     "rank": 10,
+     "rawScore": 1,
+     "categoryId": 19,
+     "displayScore": 54
+    },
+    {
+     "rank": 28,
+     "rawScore": -2,
+     "categoryId": 20,
+     "displayScore": 42
+    },
+    {
+     "rank": 17,
+     "rawScore": 0,
+     "categoryId": 21,
+     "displayScore": 50
+    },
+    {
+     "rank": 5,
+     "rawScore": 2,
+     "categoryId": 22,
+     "displayScore": 58
+    },
+    {
+     "rank": 23,
+     "rawScore": -1,
+     "categoryId": 23,
+     "displayScore": 46
+    },
+    {
+     "rank": 11,
+     "rawScore": 1,
+     "categoryId": 24,
+     "displayScore": 54
+    },
+    {
+     "rank": 29,
+     "rawScore": -2,
+     "categoryId": 25,
+     "displayScore": 42
+    },
+    {
+     "rank": 18,
+     "rawScore": 0,
+     "categoryId": 26,
+     "displayScore": 50
+    },
+    {
+     "rank": 6,
+     "rawScore": 2,
+     "categoryId": 27,
+     "displayScore": 58
+    },
+    {
+     "rank": 24,
+     "rawScore": -1,
+     "categoryId": 28,
+     "displayScore": 46
+    },
+    {
+     "rank": 12,
+     "rawScore": 1,
+     "categoryId": 29,
+     "displayScore": 54
+    }
+   ],
+   "attemptId": "2",
+   "persisted": true,
+   "completedAt": "2026-11-18T04:35:54.768+00:00",
+   "testVersion": "golomshtok-174-v1",
+   "calculatedAt": "2026-11-18T04:35:54.768+00:00",
+   "answeredCount": 174,
+   "topCategoryIds": [
+    2,
+    7,
+    12,
+    17,
+    22
+   ]
+  }
+ },
+ "history": {
+  "page": 1,
+  "items": [
+   {
+    "scores": [
+     {
+      "rank": 13,
+      "rawScore": 0,
+      "categoryId": 1,
+      "displayScore": 50
+     },
+     {
+      "rank": 1,
+      "rawScore": 2,
+      "categoryId": 2,
+      "displayScore": 58
+     },
+     {
+      "rank": 19,
+      "rawScore": -1,
+      "categoryId": 3,
+      "displayScore": 46
+     },
+     {
+      "rank": 7,
+      "rawScore": 1,
+      "categoryId": 4,
+      "displayScore": 54
+     },
+     {
+      "rank": 25,
+      "rawScore": -2,
+      "categoryId": 5,
+      "displayScore": 42
+     },
+     {
+      "rank": 14,
+      "rawScore": 0,
+      "categoryId": 6,
+      "displayScore": 50
+     },
+     {
+      "rank": 2,
+      "rawScore": 2,
+      "categoryId": 7,
+      "displayScore": 58
+     },
+     {
+      "rank": 20,
+      "rawScore": -1,
+      "categoryId": 8,
+      "displayScore": 46
+     },
+     {
+      "rank": 8,
+      "rawScore": 1,
+      "categoryId": 9,
+      "displayScore": 54
+     },
+     {
+      "rank": 26,
+      "rawScore": -2,
+      "categoryId": 10,
+      "displayScore": 42
+     },
+     {
+      "rank": 15,
+      "rawScore": 0,
+      "categoryId": 11,
+      "displayScore": 50
+     },
+     {
+      "rank": 3,
+      "rawScore": 2,
+      "categoryId": 12,
+      "displayScore": 58
+     },
+     {
+      "rank": 21,
+      "rawScore": -1,
+      "categoryId": 13,
+      "displayScore": 46
+     },
+     {
+      "rank": 9,
+      "rawScore": 1,
+      "categoryId": 14,
+      "displayScore": 54
+     },
+     {
+      "rank": 27,
+      "rawScore": -2,
+      "categoryId": 15,
+      "displayScore": 42
+     },
+     {
+      "rank": 16,
+      "rawScore": 0,
+      "categoryId": 16,
+      "displayScore": 50
+     },
+     {
+      "rank": 4,
+      "rawScore": 2,
+      "categoryId": 17,
+      "displayScore": 58
+     },
+     {
+      "rank": 22,
+      "rawScore": -1,
+      "categoryId": 18,
+      "displayScore": 46
+     },
+     {
+      "rank": 10,
+      "rawScore": 1,
+      "categoryId": 19,
+      "displayScore": 54
+     },
+     {
+      "rank": 28,
+      "rawScore": -2,
+      "categoryId": 20,
+      "displayScore": 42
+     },
+     {
+      "rank": 17,
+      "rawScore": 0,
+      "categoryId": 21,
+      "displayScore": 50
+     },
+     {
+      "rank": 5,
+      "rawScore": 2,
+      "categoryId": 22,
+      "displayScore": 58
+     },
+     {
+      "rank": 23,
+      "rawScore": -1,
+      "categoryId": 23,
+      "displayScore": 46
+     },
+     {
+      "rank": 11,
+      "rawScore": 1,
+      "categoryId": 24,
+      "displayScore": 54
+     },
+     {
+      "rank": 29,
+      "rawScore": -2,
+      "categoryId": 25,
+      "displayScore": 42
+     },
+     {
+      "rank": 18,
+      "rawScore": 0,
+      "categoryId": 26,
+      "displayScore": 50
+     },
+     {
+      "rank": 6,
+      "rawScore": 2,
+      "categoryId": 27,
+      "displayScore": 58
+     },
+     {
+      "rank": 24,
+      "rawScore": -1,
+      "categoryId": 28,
+      "displayScore": 46
+     },
+     {
+      "rank": 12,
+      "rawScore": 1,
+      "categoryId": 29,
+      "displayScore": 54
+     }
+    ],
+    "attemptId": "2",
+    "persisted": true,
+    "completedAt": "2026-11-18T04:35:54.768+00:00",
+    "testVersion": "golomshtok-174-v1",
+    "calculatedAt": "2026-11-18T04:35:54.768+00:00",
+    "answeredCount": 174,
+    "topCategoryIds": [
+     2,
+     7,
+     12,
+     17,
+     22
+    ]
+   }
+  ],
+  "total": 1,
+  "pageSize": 10
+ },
+ "admin_overview": {
+  "totalUsers": 3,
+  "usersByRegion": [
+   {
+    "users": 1,
+    "regionCode": "astana"
+   },
+   {
+    "users": 1,
+    "regionCode": "almaty-city"
+   },
+   {
+    "users": 1,
+    "regionCode": "shymkent"
+   }
+  ],
+  "startedAttempts": 1,
+  "completedAttempts": 1
+ },
+ "admin_summary": {
+  "categories": [
+   {
+    "categoryId": 1,
+    "timesInTop5": 0,
+    "averageRawScore": 0,
+    "averageDisplayScore": 50
+   },
+   {
+    "categoryId": 2,
+    "timesInTop5": 1,
+    "averageRawScore": 2,
+    "averageDisplayScore": 58
+   },
+   {
+    "categoryId": 3,
+    "timesInTop5": 0,
+    "averageRawScore": -1,
+    "averageDisplayScore": 46
+   },
+   {
+    "categoryId": 4,
+    "timesInTop5": 0,
+    "averageRawScore": 1,
+    "averageDisplayScore": 54
+   },
+   {
+    "categoryId": 5,
+    "timesInTop5": 0,
+    "averageRawScore": -2,
+    "averageDisplayScore": 42
+   },
+   {
+    "categoryId": 6,
+    "timesInTop5": 0,
+    "averageRawScore": 0,
+    "averageDisplayScore": 50
+   },
+   {
+    "categoryId": 7,
+    "timesInTop5": 1,
+    "averageRawScore": 2,
+    "averageDisplayScore": 58
+   },
+   {
+    "categoryId": 8,
+    "timesInTop5": 0,
+    "averageRawScore": -1,
+    "averageDisplayScore": 46
+   },
+   {
+    "categoryId": 9,
+    "timesInTop5": 0,
+    "averageRawScore": 1,
+    "averageDisplayScore": 54
+   },
+   {
+    "categoryId": 10,
+    "timesInTop5": 0,
+    "averageRawScore": -2,
+    "averageDisplayScore": 42
+   },
+   {
+    "categoryId": 11,
+    "timesInTop5": 0,
+    "averageRawScore": 0,
+    "averageDisplayScore": 50
+   },
+   {
+    "categoryId": 12,
+    "timesInTop5": 1,
+    "averageRawScore": 2,
+    "averageDisplayScore": 58
+   },
+   {
+    "categoryId": 13,
+    "timesInTop5": 0,
+    "averageRawScore": -1,
+    "averageDisplayScore": 46
+   },
+   {
+    "categoryId": 14,
+    "timesInTop5": 0,
+    "averageRawScore": 1,
+    "averageDisplayScore": 54
+   },
+   {
+    "categoryId": 15,
+    "timesInTop5": 0,
+    "averageRawScore": -2,
+    "averageDisplayScore": 42
+   },
+   {
+    "categoryId": 16,
+    "timesInTop5": 0,
+    "averageRawScore": 0,
+    "averageDisplayScore": 50
+   },
+   {
+    "categoryId": 17,
+    "timesInTop5": 1,
+    "averageRawScore": 2,
+    "averageDisplayScore": 58
+   },
+   {
+    "categoryId": 18,
+    "timesInTop5": 0,
+    "averageRawScore": -1,
+    "averageDisplayScore": 46
+   },
+   {
+    "categoryId": 19,
+    "timesInTop5": 0,
+    "averageRawScore": 1,
+    "averageDisplayScore": 54
+   },
+   {
+    "categoryId": 20,
+    "timesInTop5": 0,
+    "averageRawScore": -2,
+    "averageDisplayScore": 42
+   },
+   {
+    "categoryId": 21,
+    "timesInTop5": 0,
+    "averageRawScore": 0,
+    "averageDisplayScore": 50
+   },
+   {
+    "categoryId": 22,
+    "timesInTop5": 1,
+    "averageRawScore": 2,
+    "averageDisplayScore": 58
+   },
+   {
+    "categoryId": 23,
+    "timesInTop5": 0,
+    "averageRawScore": -1,
+    "averageDisplayScore": 46
+   },
+   {
+    "categoryId": 24,
+    "timesInTop5": 0,
+    "averageRawScore": 1,
+    "averageDisplayScore": 54
+   },
+   {
+    "categoryId": 25,
+    "timesInTop5": 0,
+    "averageRawScore": -2,
+    "averageDisplayScore": 42
+   },
+   {
+    "categoryId": 26,
+    "timesInTop5": 0,
+    "averageRawScore": 0,
+    "averageDisplayScore": 50
+   },
+   {
+    "categoryId": 27,
+    "timesInTop5": 0,
+    "averageRawScore": 2,
+    "averageDisplayScore": 58
+   },
+   {
+    "categoryId": 28,
+    "timesInTop5": 0,
+    "averageRawScore": -1,
+    "averageDisplayScore": 46
+   },
+   {
+    "categoryId": 29,
+    "timesInTop5": 0,
+    "averageRawScore": 1,
+    "averageDisplayScore": 54
+   }
+  ],
+  "totalAttempts": 1,
+  "averageAnsweredCount": 174
+ },
+ "admin_region_stats": {
+  "regions": [
+   {
+    "attempts": 1,
+    "categories": [
+     {
+      "categoryId": 1,
+      "timesInTop5": 0,
+      "averageRawScore": 0,
+      "averageDisplayScore": 50
+     },
+     {
+      "categoryId": 2,
+      "timesInTop5": 1,
+      "averageRawScore": 2,
+      "averageDisplayScore": 58
+     },
+     {
+      "categoryId": 3,
+      "timesInTop5": 0,
+      "averageRawScore": -1,
+      "averageDisplayScore": 46
+     },
+     {
+      "categoryId": 4,
+      "timesInTop5": 0,
+      "averageRawScore": 1,
+      "averageDisplayScore": 54
+     },
+     {
+      "categoryId": 5,
+      "timesInTop5": 0,
+      "averageRawScore": -2,
+      "averageDisplayScore": 42
+     },
+     {
+      "categoryId": 6,
+      "timesInTop5": 0,
+      "averageRawScore": 0,
+      "averageDisplayScore": 50
+     },
+     {
+      "categoryId": 7,
+      "timesInTop5": 1,
+      "averageRawScore": 2,
+      "averageDisplayScore": 58
+     },
+     {
+      "categoryId": 8,
+      "timesInTop5": 0,
+      "averageRawScore": -1,
+      "averageDisplayScore": 46
+     },
+     {
+      "categoryId": 9,
+      "timesInTop5": 0,
+      "averageRawScore": 1,
+      "averageDisplayScore": 54
+     },
+     {
+      "categoryId": 10,
+      "timesInTop5": 0,
+      "averageRawScore": -2,
+      "averageDisplayScore": 42
+     },
+     {
+      "categoryId": 11,
+      "timesInTop5": 0,
+      "averageRawScore": 0,
+      "averageDisplayScore": 50
+     },
+     {
+      "categoryId": 12,
+      "timesInTop5": 1,
+      "averageRawScore": 2,
+      "averageDisplayScore": 58
+     },
+     {
+      "categoryId": 13,
+      "timesInTop5": 0,
+      "averageRawScore": -1,
+      "averageDisplayScore": 46
+     },
+     {
+      "categoryId": 14,
+      "timesInTop5": 0,
+      "averageRawScore": 1,
+      "averageDisplayScore": 54
+     },
+     {
+      "categoryId": 15,
+      "timesInTop5": 0,
+      "averageRawScore": -2,
+      "averageDisplayScore": 42
+     },
+     {
+      "categoryId": 16,
+      "timesInTop5": 0,
+      "averageRawScore": 0,
+      "averageDisplayScore": 50
+     },
+     {
+      "categoryId": 17,
+      "timesInTop5": 1,
+      "averageRawScore": 2,
+      "averageDisplayScore": 58
+     },
+     {
+      "categoryId": 18,
+      "timesInTop5": 0,
+      "averageRawScore": -1,
+      "averageDisplayScore": 46
+     },
+     {
+      "categoryId": 19,
+      "timesInTop5": 0,
+      "averageRawScore": 1,
+      "averageDisplayScore": 54
+     },
+     {
+      "categoryId": 20,
+      "timesInTop5": 0,
+      "averageRawScore": -2,
+      "averageDisplayScore": 42
+     },
+     {
+      "categoryId": 21,
+      "timesInTop5": 0,
+      "averageRawScore": 0,
+      "averageDisplayScore": 50
+     },
+     {
+      "categoryId": 22,
+      "timesInTop5": 1,
+      "averageRawScore": 2,
+      "averageDisplayScore": 58
+     },
+     {
+      "categoryId": 23,
+      "timesInTop5": 0,
+      "averageRawScore": -1,
+      "averageDisplayScore": 46
+     },
+     {
+      "categoryId": 24,
+      "timesInTop5": 0,
+      "averageRawScore": 1,
+      "averageDisplayScore": 54
+     },
+     {
+      "categoryId": 25,
+      "timesInTop5": 0,
+      "averageRawScore": -2,
+      "averageDisplayScore": 42
+     },
+     {
+      "categoryId": 26,
+      "timesInTop5": 0,
+      "averageRawScore": 0,
+      "averageDisplayScore": 50
+     },
+     {
+      "categoryId": 27,
+      "timesInTop5": 0,
+      "averageRawScore": 2,
+      "averageDisplayScore": 58
+     },
+     {
+      "categoryId": 28,
+      "timesInTop5": 0,
+      "averageRawScore": -1,
+      "averageDisplayScore": 46
+     },
+     {
+      "categoryId": 29,
+      "timesInTop5": 0,
+      "averageRawScore": 1,
+      "averageDisplayScore": 54
+     }
+    ],
+    "regionCode": "almaty-city"
+   }
+  ]
+ },
+ "admin_users": {
+  "page": 1,
+  "items": [
+   {
+    "age": 17,
+    "name": "Анна Ли",
+    "email": "new@x.kz",
+    "userId": "00000000-0000-0000-0000-0000000000aa",
+    "regionCode": "almaty-city",
+    "registeredAt": "2026-11-18T04:35:53.957+00:00",
+    "startedAttempts": 1,
+    "completedAttempts": 1,
+    "lastCompletedAttemptId": "2"
+   }
+  ],
+  "total": 1,
+  "pageSize": 20
+ },
+ "admin_results": {
+  "page": 1,
+  "items": [
+   {
+    "age": 17,
+    "name": "Анна Ли",
+    "email": "new@x.kz",
+    "attemptId": "2",
+    "regionCode": "almaty-city",
+    "completedAt": "2026-11-18T04:35:54.768+00:00",
+    "answeredCount": 174,
+    "topCategoryIds": [
+     2,
+     7,
+     12,
+     17,
+     22
+    ]
+   }
+  ],
+  "total": 1,
+  "pageSize": 20
+ },
+ "admin_result_detail": {
+  "age": 17,
+  "name": "Анна Ли",
+  "email": "new@x.kz",
+  "scores": [
+   {
+    "rank": 1,
+    "rawScore": 2,
+    "categoryId": 2,
+    "displayScore": 58
+   },
+   {
+    "rank": 2,
+    "rawScore": 2,
+    "categoryId": 7,
+    "displayScore": 58
+   },
+   {
+    "rank": 3,
+    "rawScore": 2,
+    "categoryId": 12,
+    "displayScore": 58
+   },
+   {
+    "rank": 4,
+    "rawScore": 2,
+    "categoryId": 17,
+    "displayScore": 58
+   },
+   {
+    "rank": 5,
+    "rawScore": 2,
+    "categoryId": 22,
+    "displayScore": 58
+   },
+   {
+    "rank": 6,
+    "rawScore": 2,
+    "categoryId": 27,
+    "displayScore": 58
+   },
+   {
+    "rank": 7,
+    "rawScore": 1,
+    "categoryId": 4,
+    "displayScore": 54
+   },
+   {
+    "rank": 8,
+    "rawScore": 1,
+    "categoryId": 9,
+    "displayScore": 54
+   },
+   {
+    "rank": 9,
+    "rawScore": 1,
+    "categoryId": 14,
+    "displayScore": 54
+   },
+   {
+    "rank": 10,
+    "rawScore": 1,
+    "categoryId": 19,
+    "displayScore": 54
+   },
+   {
+    "rank": 11,
+    "rawScore": 1,
+    "categoryId": 24,
+    "displayScore": 54
+   },
+   {
+    "rank": 12,
+    "rawScore": 1,
+    "categoryId": 29,
+    "displayScore": 54
+   },
+   {
+    "rank": 13,
+    "rawScore": 0,
+    "categoryId": 1,
+    "displayScore": 50
+   },
+   {
+    "rank": 14,
+    "rawScore": 0,
+    "categoryId": 6,
+    "displayScore": 50
+   },
+   {
+    "rank": 15,
+    "rawScore": 0,
+    "categoryId": 11,
+    "displayScore": 50
+   },
+   {
+    "rank": 16,
+    "rawScore": 0,
+    "categoryId": 16,
+    "displayScore": 50
+   },
+   {
+    "rank": 17,
+    "rawScore": 0,
+    "categoryId": 21,
+    "displayScore": 50
+   },
+   {
+    "rank": 18,
+    "rawScore": 0,
+    "categoryId": 26,
+    "displayScore": 50
+   },
+   {
+    "rank": 19,
+    "rawScore": -1,
+    "categoryId": 3,
+    "displayScore": 46
+   },
+   {
+    "rank": 20,
+    "rawScore": -1,
+    "categoryId": 8,
+    "displayScore": 46
+   },
+   {
+    "rank": 21,
+    "rawScore": -1,
+    "categoryId": 13,
+    "displayScore": 46
+   },
+   {
+    "rank": 22,
+    "rawScore": -1,
+    "categoryId": 18,
+    "displayScore": 46
+   },
+   {
+    "rank": 23,
+    "rawScore": -1,
+    "categoryId": 23,
+    "displayScore": 46
+   },
+   {
+    "rank": 24,
+    "rawScore": -1,
+    "categoryId": 28,
+    "displayScore": 46
+   },
+   {
+    "rank": 25,
+    "rawScore": -2,
+    "categoryId": 5,
+    "displayScore": 42
+   },
+   {
+    "rank": 26,
+    "rawScore": -2,
+    "categoryId": 10,
+    "displayScore": 42
+   },
+   {
+    "rank": 27,
+    "rawScore": -2,
+    "categoryId": 15,
+    "displayScore": 42
+   },
+   {
+    "rank": 28,
+    "rawScore": -2,
+    "categoryId": 20,
+    "displayScore": 42
+   },
+   {
+    "rank": 29,
+    "rawScore": -2,
+    "categoryId": 25,
+    "displayScore": 42
+   }
+  ],
+  "attemptId": "2",
+  "startedAt": "2026-11-18T04:35:53.998+00:00",
+  "regionCode": "almaty-city",
+  "completedAt": "2026-11-18T04:35:54.768+00:00",
+  "testVersion": "golomshtok-174-v1",
+  "answeredCount": 174
+ },
+ "admin_export_rows": {
+  "rows": [
+   {
+    "age": 17,
+    "top": [
+     2,
+     7,
+     12,
+     17,
+     22
+    ],
+    "name": "Анна Ли",
+    "email": "new@x.kz",
+    "region": "г. Алматы",
+    "scores": {
+     "1": 50,
+     "2": 58,
+     "3": 46,
+     "4": 54,
+     "5": 42,
+     "6": 50,
+     "7": 58,
+     "8": 46,
+     "9": 54,
+     "10": 42,
+     "11": 50,
+     "12": 58,
+     "13": 46,
+     "14": 54,
+     "15": 42,
+     "16": 50,
+     "17": 58,
+     "18": 46,
+     "19": 54,
+     "20": 42,
+     "21": 50,
+     "22": 58,
+     "23": 46,
+     "24": 54,
+     "25": 42,
+     "26": 50,
+     "27": 58,
+     "28": 46,
+     "29": 54
+    },
+    "attemptId": "2",
+    "completedAt": "2026-11-18T04:35:54.768+00:00",
+    "answeredCount": 174
+   }
+  ],
+  "categories": [
+   {
+    "id": 1,
+    "name": "Физика"
+   },
+   {
+    "id": 2,
+    "name": "Математика"
+   },
+   {
+    "id": 3,
+    "name": "Химия"
+   },
+   {
+    "id": 4,
+    "name": "Биология"
+   },
+   {
+    "id": 5,
+    "name": "Медицина"
+   },
+   {
+    "id": 6,
+    "name": "Сельское хозяйство"
+   },
+   {
+    "id": 7,
+    "name": "Лесное хозяйство"
+   },
+   {
+    "id": 8,
+    "name": "Геология"
+   },
+   {
+    "id": 9,
+    "name": "Техника и механика"
+   },
+   {
+    "id": 10,
+    "name": "Электроника"
+   },
+   {
+    "id": 11,
+    "name": "Вычислительная техника"
+   },
+   {
+    "id": 12,
+    "name": "Строительство"
+   },
+   {
+    "id": 13,
+    "name": "Транспорт и связь"
+   },
+   {
+    "id": 14,
+    "name": "Металлообработка"
+   },
+   {
+    "id": 15,
+    "name": "Лёгкая промышленность"
+   },
+   {
+    "id": 16,
+    "name": "Пищевая промышленность"
+   },
+   {
+    "id": 17,
+    "name": "История"
+   },
+   {
+    "id": 18,
+    "name": "Педагогика"
+   },
+   {
+    "id": 19,
+    "name": "Психология"
+   },
+   {
+    "id": 20,
+    "name": "Право"
+   },
+   {
+    "id": 21,
+    "name": "Экономика"
+   },
+   {
+    "id": 22,
+    "name": "Литература"
+   },
+   {
+    "id": 23,
+    "name": "Иностранные языки"
+   },
+   {
+    "id": 24,
+    "name": "Журналистика"
+   },
+   {
+    "id": 25,
+    "name": "Искусство"
+   },
+   {
+    "id": 26,
+    "name": "Музыка"
+   },
+   {
+    "id": 27,
+    "name": "Физкультура и спорт"
+   },
+   {
+    "id": 28,
+    "name": "Общественная деятельность"
+   },
+   {
+    "id": 29,
+    "name": "Военное дело"
+   }
+  ]
+ }
+}

@@ -1,5 +1,16 @@
--- RLS policies for Supabase.
--- Enables row-level security and authorizes access by authenticated user / admin role.
+-- ============================================================
+-- Row Level Security для Supabase.
+--
+-- Принципы:
+--   * справочники (регионы, направления, вопросы) читают все, в том числе до входа;
+--   * пользователь читает только свои профиль, попытки, ответы и результаты, администратор — всё;
+--   * НИКТО не пишет в эти таблицы напрямую через API: профиль создаёт триггер при регистрации,
+--     попытки/ответы/результаты — только RPC из rpc_attempts.sql (SECURITY DEFINER), которые
+--     проверяют таймер и права. Раньше прямые INSERT/UPDATE позволяли подделать результат,
+--     а UPDATE профиля — выдать себе роль admin.
+--
+-- Скрипт идемпотентен: его можно выполнять повторно в Supabase → SQL Editor.
+-- ============================================================
 
 BEGIN;
 
@@ -18,6 +29,9 @@ AS $$
     );
 $$;
 
+REVOKE ALL ON FUNCTION public.is_admin() FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
+
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.regions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
@@ -28,193 +42,108 @@ ALTER TABLE public.attempt_results ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.admin_audit_logs ENABLE ROW LEVEL SECURITY;
 
--- profiles
+-- ───────── profiles: только чтение своего профиля (админ — всех) ─────────
 DROP POLICY IF EXISTS "profiles_select_own" ON public.profiles;
 CREATE POLICY "profiles_select_own"
     ON public.profiles
     FOR SELECT
+    TO authenticated
     USING (auth.uid() = id OR public.is_admin());
 
 DROP POLICY IF EXISTS "profiles_insert_own" ON public.profiles;
-CREATE POLICY "profiles_insert_own"
-    ON public.profiles
-    FOR INSERT
-    WITH CHECK (auth.uid() = id OR public.is_admin());
-
 DROP POLICY IF EXISTS "profiles_update_own" ON public.profiles;
-CREATE POLICY "profiles_update_own"
-    ON public.profiles
-    FOR UPDATE
-    USING (auth.uid() = id OR public.is_admin())
-    WITH CHECK (auth.uid() = id OR public.is_admin());
 
--- regions: all authenticated users can read
+-- ───────── справочники: читают все ─────────
 DROP POLICY IF EXISTS "regions_select_authenticated" ON public.regions;
-CREATE POLICY "regions_select_authenticated"
+DROP POLICY IF EXISTS "regions_select_all" ON public.regions;
+CREATE POLICY "regions_select_all"
     ON public.regions
     FOR SELECT
-    USING (auth.role() = 'authenticated');
+    TO anon, authenticated
+    USING (true);
 
--- categories: all authenticated users can read
 DROP POLICY IF EXISTS "categories_select_authenticated" ON public.categories;
-CREATE POLICY "categories_select_authenticated"
+DROP POLICY IF EXISTS "categories_select_all" ON public.categories;
+CREATE POLICY "categories_select_all"
     ON public.categories
     FOR SELECT
-    USING (auth.role() = 'authenticated');
+    TO anon, authenticated
+    USING (true);
 
--- questions: all authenticated users can read
 DROP POLICY IF EXISTS "questions_select_authenticated" ON public.questions;
-CREATE POLICY "questions_select_authenticated"
+DROP POLICY IF EXISTS "questions_select_all" ON public.questions;
+CREATE POLICY "questions_select_all"
     ON public.questions
     FOR SELECT
-    USING (auth.role() = 'authenticated');
+    TO anon, authenticated
+    USING (true);
 
--- test_attempts: user sees own attempts, admin sees all
+-- ───────── test_attempts: чтение своих (админ — всех), запись только через RPC ─────────
 DROP POLICY IF EXISTS "test_attempts_select_own" ON public.test_attempts;
 CREATE POLICY "test_attempts_select_own"
     ON public.test_attempts
     FOR SELECT
+    TO authenticated
     USING (user_id = auth.uid() OR public.is_admin());
 
 DROP POLICY IF EXISTS "test_attempts_insert_own" ON public.test_attempts;
-CREATE POLICY "test_attempts_insert_own"
-    ON public.test_attempts
-    FOR INSERT
-    WITH CHECK (user_id = auth.uid() OR public.is_admin());
-
 DROP POLICY IF EXISTS "test_attempts_update_own" ON public.test_attempts;
-CREATE POLICY "test_attempts_update_own"
-    ON public.test_attempts
-    FOR UPDATE
-    USING (user_id = auth.uid() OR public.is_admin())
-    WITH CHECK (user_id = auth.uid() OR public.is_admin());
 
--- answers: user sees own answers, admin sees all
+-- ───────── answers ─────────
 DROP POLICY IF EXISTS "answers_select_own" ON public.answers;
 CREATE POLICY "answers_select_own"
     ON public.answers
     FOR SELECT
+    TO authenticated
     USING (
-        attempt_id IN (
-            SELECT ta.id
+        EXISTS (
+            SELECT 1
             FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
+            WHERE ta.id = answers.attempt_id
+              AND ta.user_id = auth.uid()
         ) OR public.is_admin()
     );
 
 DROP POLICY IF EXISTS "answers_insert_own" ON public.answers;
-CREATE POLICY "answers_insert_own"
-    ON public.answers
-    FOR INSERT
-    WITH CHECK (
-        attempt_id IN (
-            SELECT ta.id
-            FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
-        ) OR public.is_admin()
-    );
-
 DROP POLICY IF EXISTS "answers_update_own" ON public.answers;
-CREATE POLICY "answers_update_own"
-    ON public.answers
-    FOR UPDATE
-    USING (
-        attempt_id IN (
-            SELECT ta.id
-            FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
-        ) OR public.is_admin()
-    )
-    WITH CHECK (
-        attempt_id IN (
-            SELECT ta.id
-            FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
-        ) OR public.is_admin()
-    );
 
--- attempt_results: user sees own results, admin sees all
+-- ───────── attempt_results ─────────
 DROP POLICY IF EXISTS "attempt_results_select_own" ON public.attempt_results;
 CREATE POLICY "attempt_results_select_own"
     ON public.attempt_results
     FOR SELECT
+    TO authenticated
     USING (
-        attempt_id IN (
-            SELECT ta.id
+        EXISTS (
+            SELECT 1
             FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
+            WHERE ta.id = attempt_results.attempt_id
+              AND ta.user_id = auth.uid()
         ) OR public.is_admin()
     );
 
 DROP POLICY IF EXISTS "attempt_results_insert_own" ON public.attempt_results;
-CREATE POLICY "attempt_results_insert_own"
-    ON public.attempt_results
-    FOR INSERT
-    WITH CHECK (
-        attempt_id IN (
-            SELECT ta.id
-            FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
-        ) OR public.is_admin()
-    );
-
 DROP POLICY IF EXISTS "attempt_results_update_own" ON public.attempt_results;
-CREATE POLICY "attempt_results_update_own"
-    ON public.attempt_results
-    FOR UPDATE
-    USING (
-        attempt_id IN (
-            SELECT ta.id
-            FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
-        ) OR public.is_admin()
-    )
-    WITH CHECK (
-        attempt_id IN (
-            SELECT ta.id
-            FROM public.test_attempts ta
-            WHERE ta.user_id = auth.uid()
-        ) OR public.is_admin()
-    );
 
--- admin users: admin only
+-- ───────── устаревшие таблицы PHP-админки: доступ только администратору на чтение ─────────
+-- (в Supabase-версии администратор — это пользователь с profiles.role = 'admin')
 DROP POLICY IF EXISTS "admin_users_select_admin" ON public.admin_users;
-CREATE POLICY "admin_users_select_admin"
-    ON public.admin_users
-    FOR SELECT
-    USING (public.is_admin());
-
 DROP POLICY IF EXISTS "admin_users_insert_admin" ON public.admin_users;
-CREATE POLICY "admin_users_insert_admin"
-    ON public.admin_users
-    FOR INSERT
-    WITH CHECK (public.is_admin());
-
 DROP POLICY IF EXISTS "admin_users_update_admin" ON public.admin_users;
-CREATE POLICY "admin_users_update_admin"
-    ON public.admin_users
-    FOR UPDATE
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
 
--- admin audit logs: admin only
 DROP POLICY IF EXISTS "audit_logs_select_admin" ON public.admin_audit_logs;
 CREATE POLICY "audit_logs_select_admin"
     ON public.admin_audit_logs
     FOR SELECT
+    TO authenticated
     USING (public.is_admin());
 
 DROP POLICY IF EXISTS "audit_logs_insert_admin" ON public.admin_audit_logs;
-CREATE POLICY "audit_logs_insert_admin"
-    ON public.admin_audit_logs
-    FOR INSERT
-    WITH CHECK (public.is_admin());
-
 DROP POLICY IF EXISTS "audit_logs_update_admin" ON public.admin_audit_logs;
-CREATE POLICY "audit_logs_update_admin"
-    ON public.admin_audit_logs
-    FOR UPDATE
-    USING (public.is_admin())
-    WITH CHECK (public.is_admin());
+
+-- Таблица admin_users хранит хэши паролей PHP-админки — через API её не отдаём никому.
+REVOKE ALL ON public.admin_users FROM anon, authenticated;
+
+NOTIFY pgrst, 'reload schema';
 
 COMMIT;

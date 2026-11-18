@@ -11,6 +11,10 @@ import type { AuthSession } from '../types';
  */
 const KEY = 'karta-interesov:auth:v1';
 
+const isValidToken = (token: string): boolean =>
+  /^[a-f0-9]{64}$/.test(token)
+  || /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(token);
+
 export function loadAuth(): AuthSession | null {
   try {
     const raw = window.localStorage.getItem(KEY);
@@ -19,7 +23,7 @@ export function loadAuth(): AuthSession | null {
     if (typeof d !== 'object' || d === null) return null;
     const o = d as Record<string, unknown>;
     const u = o.user as Record<string, unknown> | null;
-    if (typeof o.accessToken !== 'string' || !/^[a-f0-9]{64}$/.test(o.accessToken)) return null;
+    if (typeof o.accessToken !== 'string' || !isValidToken(o.accessToken)) return null;
     if (typeof u !== 'object' || u === null || typeof u.userId !== 'string' || typeof u.email !== 'string') return null;
     return {
       accessToken: o.accessToken,

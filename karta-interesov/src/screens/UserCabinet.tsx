@@ -84,7 +84,7 @@ export default function UserCabinet({ user, token, onBack, onStart, onLogout }: 
             <div className="cabinet-section-heading">
               <div>
                 <h2 id="cabinet-results-title" className="h3">Мои результаты</h2>
-                <p className="small muted" style={{ marginTop: 5 }}>История загружается из вашей учётной записи в MySQL.</p>
+                <p className="small muted" style={{ marginTop: 5 }}>История загружается из вашей учётной записи.</p>
               </div>
               <button type="button" className="btn btn--primary" onClick={onStart}>Начать тест</button>
             </div>

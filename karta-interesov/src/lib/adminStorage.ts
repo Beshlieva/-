@@ -13,9 +13,12 @@ export function loadAdminSession(): AdminSession | null {
     const d: unknown = JSON.parse(raw);
     if (typeof d !== 'object' || d === null) return null;
     const o = d as Record<string, unknown>;
-    if (typeof o.token !== 'string' || !/^[a-f0-9]{64}$/.test(o.token) || typeof o.expiresAt !== 'string') return null;
+    // Токен PHP API (64 hex) или JWT сессии Supabase
+    const validToken = typeof o.token === 'string'
+      && (/^[a-f0-9]{64}$/.test(o.token) || /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(o.token));
+    if (!validToken || typeof o.expiresAt !== 'string') return null;
     if (Date.parse(o.expiresAt) <= Date.now()) return null;
-    return { token: o.token, expiresAt: o.expiresAt };
+    return { token: o.token as string, expiresAt: o.expiresAt };
   } catch {
     return null;
   }

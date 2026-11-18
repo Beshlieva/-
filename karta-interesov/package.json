@@ -16,7 +16,8 @@
     "catalog:export": "tsx scripts/export-catalog.ts",
     "catalog:check": "tsx scripts/export-catalog.ts --check",
     "verify:server": "tsx scripts/verify-server-flow.ts",
-    "verify:all": "tsx scripts/verify.ts && tsx scripts/verify-server-flow.ts"
+    "verify:all": "tsx scripts/verify.ts && tsx scripts/verify-server-flow.ts && npm test",
+    "test": "tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",

@@ -4,7 +4,10 @@ import AppHeader, { AppFooter } from '../components/AppHeader';
 import { IconAlert } from '../components/icons';
 import { ApiError } from '../types';
 import type { AdminSession } from '../types';
-import { adminService, describeError } from '../services/api';
+import { adminService, backend, describeError } from '../services/api';
+
+/** В Supabase-версии администратор входит по email своей учётной записи (profiles.role = 'admin'). */
+const LOGIN_BY_EMAIL = backend === 'supabase';
 
 interface Props {
   onLogin: (session: AdminSession) => void;
@@ -24,7 +27,7 @@ export default function AdminLoginScreen({ onLogin, notice }: Props) {
     e.preventDefault();
     if (submitting.current) return;
     if (!username.trim() || !password) {
-      setError('Введите логин и пароль.');
+      setError(LOGIN_BY_EMAIL ? 'Введите email и пароль.' : 'Введите логин и пароль.');
       return;
     }
     submitting.current = true;
@@ -52,12 +55,12 @@ export default function AdminLoginScreen({ onLogin, notice }: Props) {
         <div className="container container--narrow">
           <h1 className="h2">Вход для администратора</h1>
           <p className="lead" style={{ marginTop: 12, marginBottom: 24 }}>
-            Панель доступна только создателю теста. Учётная запись студента здесь не подходит.
+            Панель доступна только учётным записям с правами администратора.
           </p>
           {!adminService.enabled && (
             <div className="form-alert form-alert--info" role="alert" style={{ marginBottom: 16 }}>
               <IconAlert size={18} />
-              <span>Панель работает только с подключённым сервером (VITE_API_MODE=api).</span>
+              <span>Панель работает только с подключённой базой данных (Supabase или PHP API).</span>
             </div>
           )}
           <form className="card form" onSubmit={handleSubmit} noValidate>
@@ -68,9 +71,10 @@ export default function AdminLoginScreen({ onLogin, notice }: Props) {
               </div>
             )}
             <div className="field">
-              <label className="field__label" htmlFor="adm-username">Логин</label>
+              <label className="field__label" htmlFor="adm-username">{LOGIN_BY_EMAIL ? 'Email' : 'Логин'}</label>
               <input id="adm-username" className="input" autoComplete="username" value={username}
-                onChange={e => { setUsername(e.target.value); setError(null); }} disabled={busy} maxLength={64} />
+                type={LOGIN_BY_EMAIL ? 'email' : 'text'} inputMode={LOGIN_BY_EMAIL ? 'email' : undefined}
+                onChange={e => { setUsername(e.target.value); setError(null); }} disabled={busy} maxLength={LOGIN_BY_EMAIL ? 254 : 64} />
             </div>
             <div className="field">
               <label className="field__label" htmlFor="adm-password">Пароль</label>
